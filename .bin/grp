@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 set -e # Exit if one of commands exit with non-zero exit code
 set -u # Treat unset variables and parameters other than the special parameters ‘@’ or ‘*’ as an error
 set -o pipefail # Any command failed in the pipe fails the whole pipe
@@ -9,4 +9,3 @@ if [ ! -t 0 ]; then # If stdin descriptor isn't opened on tty (it can be interpr
 else # Otherwise grep current dir
     grep --color=auto --fixed-string --ignore-case --binary-files=without-match -n -r "$*"
 fi
-

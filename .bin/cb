@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 set -e # Exit if one of commands exit with non-zero exit code
 set -u # Treat unset variables and parameters other than the special parameters ‘@’ or ‘*’ as an error
 set -o pipefail # Any command failed in the pipe fails the whole pipe
@@ -7,19 +7,11 @@ set -o pipefail # Any command failed in the pipe fails the whole pipe
 # cb is a shorthand for "ClipBoard"
 
 paste() {
-    if isMacOs; then
-        pbpaste
-    else
-        xsel -ob;
-    fi
+    pbpaste
 }
 
 copy() {
-    if isMacOs; then
-        pbcopy
-    else
-        xclip -selection clipboard
-    fi
+    pbcopy
 }
 
 if [ $# -eq 1 ]; then
@@ -29,4 +21,3 @@ elif [ ! -t 0 ]; then # If stdin descriptor isn't opened on tty (it can be inter
 else
     paste
 fi
-
