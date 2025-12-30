@@ -8,6 +8,11 @@ os.execute("[ ! -d $HOME/.local/share/sketchybar_lua/ ] && (git clone https://gi
 -- installed into the default search path then this would not be needed)
 package.cpath = package.cpath .. ";/Users/" .. os.getenv("USER") .. "/.local/share/sketchybar_lua/?.so"
 
+-- Add luarocks paths for AeroSpaceLua dependencies
+local USER = os.getenv("USER")
+package.path = package.path .. ";/Users/" .. USER .. "/.luarocks/share/lua/5.4/?.lua;/Users/" .. USER .. "/.luarocks/share/lua/5.4/?/init.lua"
+package.cpath = package.cpath .. ";/Users/" .. USER .. "/.luarocks/lib/lua/5.4/?.so"
+
 -- Require the sketchybar module
 sbar = require("sketchybar")
 

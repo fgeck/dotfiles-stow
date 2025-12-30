@@ -2,37 +2,55 @@ local colors = require("colors")
 local settings = require("settings")
 local app_icons = require("helpers.app_icons")
 
-local query_workspaces =
-"aerospace list-workspaces --all --format '%{workspace}%{monitor-appkit-nsscreen-screens-id}' --json"
+-- Load AeroSpaceLua
+local Aerospace = require("helpers.aerospace")
+local aerospace = Aerospace.new()
+
+-- Wait for AeroSpace connection
+while not aerospace:is_initialized() do
+    os.execute("sleep 0.1")
+end
 
 -- Root is used to handle event subscriptions
-local root = sbar.add("item", { drawing = false, })
+local root = sbar.add("item", { drawing = false })
 local workspaces = {}
 
+-- Helper function to get windows grouped by workspace with callbacks
 local function withWindows(f)
-    local open_windows = {}
-    local get_windows = "aerospace list-windows --monitor all --format '%{workspace}%{app-name}' --json"
-    local query_visible_workspaces =
-    "aerospace list-workspaces --visible --monitor all --format '%{workspace}%{monitor-appkit-nsscreen-screens-id}' --json"
-    local get_focus_workspaces = "aerospace list-workspaces --focused"
-    sbar.exec(get_windows, function(workspace_and_windows)
-        for _, entry in ipairs(workspace_and_windows) do
-            local workspace_index = entry.workspace
-            local app = entry["app-name"]
-            if open_windows[workspace_index] == nil then
-                open_windows[workspace_index] = {}
+    aerospace:list_all_windows(function(windows)
+        -- Group windows by workspace
+        local open_windows = {}
+        for _, window in ipairs(windows) do
+            local workspace = window.workspace
+            local app = window["app-name"]
+            if open_windows[workspace] == nil then
+                open_windows[workspace] = {}
             end
-            table.insert(open_windows[workspace_index], app)
+            table.insert(open_windows[workspace], app)
         end
-        sbar.exec(get_focus_workspaces, function(focused_workspaces)
-            sbar.exec(query_visible_workspaces, function(visible_workspaces)
-                local args = {
+
+        -- Get focused workspace
+        aerospace:list_current(function(focused_workspace)
+            focused_workspace = focused_workspace:match("^%s*(.-)%s*$")
+
+            -- Get workspace info (focused, visible, monitor)
+            aerospace:query_workspaces(function(workspace_info)
+                local visible_workspaces = {}
+                local workspace_monitors = {}
+
+                for _, ws in ipairs(workspace_info) do
+                    if ws["workspace-is-visible"] then
+                        table.insert(visible_workspaces, ws)
+                    end
+                    workspace_monitors[ws.workspace] = ws["monitor-appkit-nsscreen-screens-id"]
+                end
+
+                f({
                     open_windows = open_windows,
-                    focused_workspaces = focused_workspaces,
-                    visible_workspaces =
-                        visible_workspaces
-                }
-                f(args)
+                    focused_workspace = focused_workspace,
+                    visible_workspaces = visible_workspaces,
+                    workspace_monitors = workspace_monitors
+                })
             end)
         end)
     end)
@@ -40,8 +58,9 @@ end
 
 local function updateWindow(workspace_index, args)
     local open_windows = args.open_windows[workspace_index]
-    local focused_workspaces = args.focused_workspaces
+    local focused_workspace = args.focused_workspace
     local visible_workspaces = args.visible_workspaces
+    local workspace_monitors = args.workspace_monitors
 
     if open_windows == nil then
         open_windows = {}
@@ -58,35 +77,46 @@ local function updateWindow(workspace_index, args)
     end
 
     sbar.animate("tanh", 10.0, function()
-        for i, visible_workspace in ipairs(visible_workspaces) do
-            if no_app and workspace_index == visible_workspace["workspace"] then
-                local monitor_id = visible_workspace["monitor-appkit-nsscreen-screens-id"]
-                icon_line = " —"
-                workspaces[workspace_index]:set({
-                    drawing = true,
-                    label = { string = icon_line },
-                    display = monitor_id,
-                })
-                return
+        -- Check if this workspace is visible
+        local is_visible = false
+        for _, visible_ws in ipairs(visible_workspaces) do
+            if workspace_index == visible_ws.workspace then
+                is_visible = true
+                break
             end
         end
-        if no_app and workspace_index ~= focused_workspaces then
+
+        if no_app and is_visible then
+            icon_line = " —"
+            workspaces[workspace_index]:set({
+                drawing = true,
+                label = { string = icon_line },
+                display = workspace_monitors[workspace_index],
+            })
+            return
+        end
+
+        if no_app and workspace_index ~= focused_workspace then
             workspaces[workspace_index]:set({
                 drawing = false,
             })
             return
         end
-        if no_app and workspace_index == focused_workspaces then
+
+        if no_app and workspace_index == focused_workspace then
             icon_line = " —"
             workspaces[workspace_index]:set({
                 drawing = true,
                 label = { string = icon_line },
+                display = workspace_monitors[workspace_index],
             })
+            return
         end
 
         workspaces[workspace_index]:set({
             drawing = true,
             label = { string = icon_line },
+            display = workspace_monitors[workspace_index],
         })
     end)
 end
@@ -100,23 +130,22 @@ local function updateWindows()
 end
 
 local function updateWorkspaceMonitor()
-    local workspace_monitor = {}
-    sbar.exec(query_workspaces, function(workspaces_and_monitors)
-        for _, entry in ipairs(workspaces_and_monitors) do
-            local space_index = entry.workspace
-            local monitor_id = math.floor(entry["monitor-appkit-nsscreen-screens-id"])
-            workspace_monitor[space_index] = monitor_id
-        end
-        for workspace_index, _ in pairs(workspaces) do
-            workspaces[workspace_index]:set({
-                display = workspace_monitor[workspace_index],
-            })
+    aerospace:query_workspaces(function(workspace_info)
+        for _, ws in ipairs(workspace_info) do
+            local space_index = ws.workspace
+            local monitor_id = math.floor(ws["monitor-appkit-nsscreen-screens-id"])
+            if workspaces[space_index] then
+                workspaces[space_index]:set({
+                    display = monitor_id,
+                })
+            end
         end
     end)
 end
 
-sbar.exec(query_workspaces, function(workspaces_and_monitors)
-    for _, entry in ipairs(workspaces_and_monitors) do
+-- Initialize workspaces
+aerospace:query_workspaces(function(workspace_info)
+    for _, entry in ipairs(workspace_info) do
         local workspace_index = entry.workspace
 
         local workspace = sbar.add("item", {
@@ -181,11 +210,13 @@ sbar.exec(query_workspaces, function(workspaces_and_monitors)
         updateWindows()
     end)
 
-    sbar.exec("aerospace list-workspaces --focused", function(focused_workspace)
-        local focused_workspace = focused_workspace:match("^%s*(.-)%s*$")
-        workspaces[focused_workspace]:set({
-            icon = { highlight = true },
-            label = { highlight = true },
-        })
+    aerospace:list_current(function(focused_workspace)
+        focused_workspace = focused_workspace:match("^%s*(.-)%s*$")
+        if workspaces[focused_workspace] then
+            workspaces[focused_workspace]:set({
+                icon = { highlight = true },
+                label = { highlight = true },
+            })
+        end
     end)
 end)
