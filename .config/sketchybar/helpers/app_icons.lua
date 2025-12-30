@@ -303,6 +303,7 @@ return {
     ["WezTerm"] = ":wezterm:",
     ["WhatsApp"] = ":whats_app:",
     ["‎WhatsApp"] = ":whats_app:",
+    ["Wireguard"] = ":wireguard:",
     ["Xcode"] = ":xcode:",
     ["Yandex Music"] = ":yandex_music:",
     ["Yuque"] = ":yuque:",
