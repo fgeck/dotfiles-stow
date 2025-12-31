@@ -27,3 +27,8 @@ local cal = sbar.add("item", {
 cal:subscribe({ "forced", "routine", "system_woke" }, function(env)
     cal:set({ icon = os.date("%a %d %b"), label = os.date("%H:%M") })
 end)
+
+-- Click to toggle Itsycal menu bar item
+cal:subscribe("mouse.clicked", function(env)
+    sbar.exec("osascript -e 'tell application \"System Events\" to tell process \"Itsycal\" to click menu bar item 1 of menu bar 2' &>/dev/null")
+end)

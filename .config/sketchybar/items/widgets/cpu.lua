@@ -6,35 +6,33 @@ local settings = require("settings")
 -- the cpu load data, which is fired every 2.0 seconds.
 sbar.exec("killall cpu_load >/dev/null; $CONFIG_DIR/helpers/event_providers/cpu_load/bin/cpu_load cpu_update 2.0")
 
-local cpu = sbar.add("graph", "widgets.cpu" , 42, {
+local cpu = sbar.add("item", "widgets.cpu", {
   position = "right",
-  graph = { color = colors.blue },
-  background = {
-    height = 22,
-    color = { alpha = 0 },
-    border_color = { alpha = 0 },
-    drawing = true,
+  icon = {
+    string = icons.cpu,
+    font = {
+      family = settings.font_icon.text,
+      style = settings.font_icon.style_map["Bold"],
+      size = settings.font_icon.size
+    },
+    padding_left = settings.padding.icon_label_item.icon.padding_left,
+    padding_right = settings.padding.icon_label_item.icon.padding_right,
   },
-  icon = { string = icons.cpu },
   label = {
-    string = "cpu ??%",
+    string = "??%",
     font = {
       family = settings.font.numbers,
       style = settings.font.style_map["Bold"],
       size = 9.0,
     },
     align = "right",
-    padding_right = 0,
-    width = 0,
-    y_offset = 4
+    padding_right = settings.padding.icon_label_item.label.padding_right,
   },
-  padding_right = settings.paddings + 6
 })
 
 cpu:subscribe("cpu_update", function(env)
   -- Also available: env.user_load, env.sys_load
   local load = tonumber(env.total_load)
-  cpu:push({ load / 100. })
 
   local color = colors.blue
   if load > 30 then
@@ -48,8 +46,11 @@ cpu:subscribe("cpu_update", function(env)
   end
 
   cpu:set({
-    graph = { color = color },
-    label = "cpu " .. env.total_load .. "%",
+    label = {
+      string = load .. "%",
+      color = color
+    },
+    icon = { color = color }
   })
 end)
 
