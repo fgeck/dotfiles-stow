@@ -14,7 +14,7 @@ return {
     transparent = 0x00000000,
 
     bar = {
-        bg = 0x00000000,
+        bg = 0xf0181819,  -- Dark with slight transparency
         border = 0xff2c2e34,
     },
 
