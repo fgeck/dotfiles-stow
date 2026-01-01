@@ -46,7 +46,18 @@ local vpn_wireguard = sbar.add("item", {
 })
 
 vpn_wireguard:subscribe("mouse.clicked", function(env)
-    sbar.exec("osascript -e 'tell application \"System Events\" to tell process \"WireGuard\" to click menu bar item 1 of menu bar 2' &>/dev/null")
+    -- Check if WireGuard is running, open it if not (and exit), otherwise click menu bar item
+    sbar.exec([[
+        osascript -e '
+            tell application "System Events"
+                if not (exists process "WireGuard") then
+                    tell application "WireGuard" to activate
+                    return
+                end if
+                tell process "WireGuard" to click menu bar item 1 of menu bar 2
+            end tell
+        ' &>/dev/null
+    ]])
     sbar.exec("sketchybar --set vpn popup.drawing=off")
 end)
 
@@ -67,7 +78,8 @@ local vpn_globalprotect = sbar.add("item", {
 })
 
 vpn_globalprotect:subscribe("mouse.clicked", function(env)
-    sbar.exec("osascript -e 'tell application \"System Events\" to tell process \"GlobalProtect\" to click menu bar item 1 of menu bar 2' &>/dev/null")
+    sbar.exec(
+        "osascript -e 'tell application \"System Events\" to tell process \"GlobalProtect\" to click menu bar item 1 of menu bar 2' &>/dev/null")
     sbar.exec("sketchybar --set vpn popup.drawing=off")
 end)
 
