@@ -12,6 +12,7 @@ config-version = 2
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
   'exec-and-forget borders',
+  'exec-and-forget sketchybar'
 ]
 
 # Notify Sketchybar about workspace change
