@@ -80,12 +80,6 @@ on-mode-changed = [
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
-[workspace-to-monitor-force-assignment]
-    1 = 'main' # intelliJ + iTerm
-    2 = 'main' # browser
-    3 = 'Built-in Retina Display' # slack
-    4 = 'Built-in Retina Display' # browser 2
-    5 = 'Built-in Retina Display' # chat
 
 [gaps]
     inner.horizontal = 3
@@ -262,23 +256,23 @@ run = [
 check-further-callbacks = false
 
 [[on-window-detected]]
-if.app-id = 'org.mozilla.librewolf'
-run = [
-  'move-node-to-workspace 4'
-]
-check-further-callbacks = false
-
-[[on-window-detected]]
 if.app-id = 'com.apple.mail'
 run = [
-  'move-node-to-workspace 5',
+  'move-node-to-workspace 4',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'org.whispersystems.signal-desktop'
 run = [
-  'move-node-to-workspace 5',
+  'move-node-to-workspace 4',
+]
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.librewolf'
+run = [
+  'move-node-to-workspace 5'
 ]
 check-further-callbacks = false
 
@@ -288,3 +282,18 @@ run = [
   'move-node-to-workspace 6',
 ]
 check-further-callbacks = false
+
+# [workspace-to-monitor-force-assignment]
+#     1 = 'main' # IntelliJ + iTerm
+#     2 = 'main' # Browser
+#     3 = 'Built-in Retina Display' # Slack
+#     4 = 'Built-in Retina Display' # Browser 2
+#     5 = 'Built-in Retina Display' # Chat
+[workspace-to-monitor-force-assignment]
+    1 = 'main' # IntelliJ + iTerm
+    2 = 'main' # Browser
+    3 = 'Built-in Retina Display' # Slack
+    4 = 'secondary' # Teams + Outlook
+    5 = 'main' # Browser 2
+    6 = 'main' # Chat
+    7 = 'main' # Zed + ghostty

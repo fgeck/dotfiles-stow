@@ -80,12 +80,6 @@ on-mode-changed = [
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
-# [workspace-to-monitor-force-assignment]
-#     1 = 'main' # intelliJ
-#     2 = 'main' # browser
-#     3 = 'Built-in Retina Display' # slack
-#     4 = 'main' # browser 2
-#     5 = 'main' # chat
 
 [gaps]
     inner.horizontal = 3
@@ -208,83 +202,99 @@ on-mode-changed = [
 [[on-window-detected]]
 if.app-id = 'com.jetbrains.intellij'
 run = [
-  'move-node-to-workspace 1',
+    'move-node-to-workspace 1',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'com.googlecode.iterm2'
 run = [
-  'move-node-to-workspace 1',
+    'move-node-to-workspace 1',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'com.electron.dockerdesktop'
 run = [
-  'move-node-to-workspace 1',
+    'move-node-to-workspace 1',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'net.imput.helium'
 run = [
-  'move-node-to-workspace 2',
+    'move-node-to-workspace 2',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.VSCode'
 run = [
-  'move-node-to-workspace 2',
+    'move-node-to-workspace 2',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = [
-  'move-node-to-workspace 3',
+    'move-node-to-workspace 3',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Outlook'
 run = [
-  'move-node-to-workspace 3',
+    'move-node-to-workspace 4',
 ]
 
 check-further-callbacks = false
 [[on-window-detected]]
 if.app-id = 'com.microsoft.teams2'
 run = [
-  'move-node-to-workspace 3',
-]
-check-further-callbacks = false
-
-[[on-window-detected]]
-if.app-id = 'org.mozilla.librewolf'
-run = [
-  'move-node-to-workspace 4'
+    'move-node-to-workspace 4',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'com.apple.mail'
 run = [
-  'move-node-to-workspace 5',
+    'move-node-to-workspace 5',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'org.whispersystems.signal-desktop'
 run = [
-  'move-node-to-workspace 5',
+    'move-node-to-workspace 5',
+]
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.librewolf'
+run = [
+    'move-node-to-workspace 6'
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'dev.zed.Zed'
 run = [
-  'move-node-to-workspace 6',
+    'move-node-to-workspace 7',
 ]
 check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = [
+    'move-node-to-workspace 7',
+]
+check-further-callbacks = false
+
+[workspace-to-monitor-force-assignment]
+    1 = 'main' # IntelliJ + iTerm
+    2 = 'main' # Browser
+    3 = 'Built-in Retina Display' # Slack
+    4 = 'secondary' # Teams + Outlook
+    5 = 'main' # Browser 2
+    6 = 'main' # Chat
+    7 = 'main' # Zed + ghostty
