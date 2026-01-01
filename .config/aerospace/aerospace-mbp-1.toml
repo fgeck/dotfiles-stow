@@ -92,9 +92,8 @@ on-mode-changed = [
     inner.vertical =   3
     outer.left =       1
     outer.bottom =     1
-    # for sketchybar
     outer.top = [
-        { monitor."built-in" = 5 }, # change to 10
+        { monitor."built-in" = 4 }, # for sketchybar
         { monitor."main" = 0 },
         0
     ]
