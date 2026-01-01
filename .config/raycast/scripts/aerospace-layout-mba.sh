@@ -2,7 +2,7 @@
 
 # Required parameters:
 # @raycast.schemaVersion 1
-# @raycast.title aerospace layout
+# @raycast.title aerospace layout mba
 # @raycast.mode compact
 
 # Optional parameters:
