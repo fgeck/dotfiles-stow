@@ -19,7 +19,7 @@ local rate_label_width = 60
 local rate_font = {
     family = settings.font.numbers,
     style = settings.font.style_map["Bold"],
-    size = 9.0,
+    size = 10.0,
 }
 
 -- Upload item (top line, stacked)

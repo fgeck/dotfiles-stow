@@ -10,7 +10,7 @@ local brew = sbar.add("item", "widgets.brew", {
         font = {
             family = settings.font_icon.text,
             style = settings.font_icon.style_map["Bold"],
-            size = settings.font_icon.size
+            size = settings.icon_size
         },
         padding_left = settings.padding.icon_label_item.icon.padding_left,
         padding_right = settings.padding.icon_label_item.icon.padding_right,
@@ -20,7 +20,7 @@ local brew = sbar.add("item", "widgets.brew", {
         font = {
             family = settings.font.numbers,
             style = settings.font.style_map["Bold"],
-            size = 9.0,
+            size = settings.label_size,
         },
         padding_right = settings.padding.icon_label_item.label.padding_right,
     },
