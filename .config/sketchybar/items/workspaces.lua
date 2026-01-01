@@ -15,6 +15,61 @@ end
 local root = sbar.add("item", { drawing = false })
 local workspaces = {}
 
+-- AeroSpace mode indicator
+local mode_indicator = sbar.add("item", "aerospace.mode", {
+    position = "left",
+    icon = {
+        string = "M",
+        color = colors.green,
+        font = {
+            family = settings.font.text,
+            style = settings.font.style_map["Bold"],
+            size = 14.0,
+        },
+        padding_left = 8,
+        padding_right = 8,
+    },
+    label = { drawing = false },
+    background = {
+        color = colors.bg1,
+        drawing = true,
+    },
+})
+
+local function update_mode_indicator()
+    -- Query current mode using AeroSpaceLua API
+    aerospace:list_modes(true, function(current_mode)
+        -- print("[AEROSPACE MODE] Query result: [" .. current_mode .. "]")
+        current_mode = current_mode:match("^%s*(.-)%s*$")
+        -- print("[AEROSPACE MODE] Trimmed: [" .. current_mode .. "]")
+
+        local icon_str = "M"
+        local icon_color = colors.green
+
+        if current_mode == "service" then
+            icon_str = "S"
+            icon_color = colors.yellow
+        end
+
+        -- print("[AEROSPACE MODE] Setting icon to: " .. icon_str)
+
+        mode_indicator:set({
+            icon = {
+                string = icon_str,
+                color = icon_color
+            }
+        })
+    end)
+end
+
+mode_indicator:subscribe("aerospace_mode_change", function(env)
+    -- print("[AEROSPACE MODE] Event received! Querying current mode...")
+    update_mode_indicator()
+end)
+
+-- Initialize mode on startup
+update_mode_indicator()
+
 -- Helper function to get windows grouped by workspace with callbacks
 local function withWindows(f)
     aerospace:list_all_windows(function(windows)
@@ -153,7 +208,7 @@ aerospace:query_workspaces(function(workspace_info)
                 color = colors.bg1,
                 drawing = true,
             },
-            click_script = "aerospace workspace " .. workspace_index,
+            click_script = "aerospace workspace " .. workspace_index .. " 2>/dev/null",
             drawing = false, -- Hide all items at first
             icon = {
                 color = colors.with_alpha(colors.white, 0.3),
