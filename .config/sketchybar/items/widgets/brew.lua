@@ -52,10 +52,10 @@ end
 local function update_brew()
     local brew_cmd = '/bin/zsh -c "export HOMEBREW_NO_AUTO_UPDATE=1; brew outdated -q"'
 
-    -- print("[BREW UPDATE] Running command: " .. brew_cmd)
+    -- print("[BREW OUTDATED] Running command: " .. brew_cmd)
 
     sbar.exec(brew_cmd, function(outdated_output)
-        -- print("[BREW UPDATE] Output: " .. outdated_output)
+        -- print("[BREW OUTDATED] Cmd Output: " .. outdated_output)
 
         -- Clear and rebuild cache
         cached_packages = {}
@@ -63,16 +63,17 @@ local function update_brew()
         -- Count and cache valid package lines
         local count = 0
         for line in outdated_output:gmatch("[^\r\n]+") do
+            -- print("[BREW OUTDATED] Line: " .. line)
             if is_package_line(line) then
                 count = count + 1
                 table.insert(cached_packages, line)
-                -- print("[BREW UPDATE] Valid package: " .. line)
+                -- print("[BREW OUTDATED] Valid package: " .. line)
             else
-                -- print("[BREW UPDATE] Filtered line: " .. line)
+                -- print("[BREW OUTDATED] Filtered line: " .. line)
             end
         end
 
-        -- print("[BREW UPDATE] Final count: " .. count .. ", cached: " .. #cached_packages)
+        -- print("[BREW OUTDATED] Final count: " .. count .. ", cached: " .. #cached_packages)
 
         local color = colors.green
         if count >= 4 then
