@@ -131,6 +131,9 @@ local function updateWindow(workspace_index, args)
         icon_line = icon_line .. " " .. icon
     end
 
+    -- Determine if this workspace is focused
+    local is_focused = workspace_index == focused_workspace
+
     sbar.animate("tanh", 10.0, function()
         -- Check if this workspace is visible
         local is_visible = false
@@ -145,7 +148,11 @@ local function updateWindow(workspace_index, args)
             icon_line = " —"
             workspaces[workspace_index]:set({
                 drawing = true,
-                label = { string = icon_line },
+                icon = { highlight = is_focused },
+                label = {
+                    string = icon_line,
+                    highlight = is_focused
+                },
                 display = workspace_monitors[workspace_index],
             })
             return
@@ -162,7 +169,11 @@ local function updateWindow(workspace_index, args)
             icon_line = " —"
             workspaces[workspace_index]:set({
                 drawing = true,
-                label = { string = icon_line },
+                icon = { highlight = is_focused },
+                label = {
+                    string = icon_line,
+                    highlight = is_focused
+                },
                 display = workspace_monitors[workspace_index],
             })
             return
@@ -170,7 +181,11 @@ local function updateWindow(workspace_index, args)
 
         workspaces[workspace_index]:set({
             drawing = true,
-            label = { string = icon_line },
+            icon = { highlight = is_focused },
+            label = {
+                string = icon_line,
+                highlight = is_focused
+            },
             display = workspace_monitors[workspace_index],
         })
     end)
@@ -231,19 +246,6 @@ aerospace:query_workspaces(function(workspace_info)
         })
 
         workspaces[workspace_index] = workspace
-
-        workspace:subscribe("aerospace_workspace_change", function(env)
-            local focused_workspace = env.FOCUSED_WORKSPACE
-            local is_focused = focused_workspace == workspace_index
-
-            sbar.animate("tanh", 10.0, function()
-                workspace:set({
-                    icon = { highlight = is_focused },
-                    label = { highlight = is_focused },
-                    blur_radius = 30,
-                })
-            end)
-        end)
     end
 
     -- Initial setup
@@ -251,7 +253,8 @@ aerospace:query_workspaces(function(workspace_info)
     updateWorkspaceMonitor()
 
     -- Subscribe to window creation/destruction events
-    root:subscribe("aerospace_workspace_change", function()
+    root:subscribe("aerospace_workspace_change", function(env)
+        -- updateWindows() will handle both app icons and highlighting
         updateWindows()
     end)
 
