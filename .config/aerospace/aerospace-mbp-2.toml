@@ -88,7 +88,7 @@ on-mode-changed = [
     outer.bottom =     1
     outer.top = [
         { monitor."built-in" = 0 },
-        { monitor."main" = 0 },
+        { monitor."main" = 32 },
         0
     ]
     outer.right =      1
