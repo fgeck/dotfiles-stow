@@ -47,15 +47,27 @@ local function connect(path)
 end
 
 local function stdout(raw)
+    -- Handle empty or whitespace-only responses
+    if not raw or raw == "" or raw:match("^%s*$") then
+        return ""
+    end
+
     if use_simd then
         local ok, doc = pcall(simdjson.open, raw)
         if ok then
-            return doc:atPointer("/stdout")
+            local stdout_ok, stdout_val = pcall(function() return doc:atPointer("/stdout") end)
+            if stdout_ok then
+                return stdout_val or ""
+            end
         end
         use_simd = false
     end
     -- Fallback: parse JSON manually to extract stdout field
-    local json = cjson.decode(raw)
+    local ok, json = pcall(cjson.decode, raw)
+    if not ok then
+        -- JSON parse failed, return empty string instead of crashing
+        return ""
+    end
     return json.stdout or ""
 end
 
@@ -93,6 +105,9 @@ function Aerospace:_query(args, want_json, big)
     -- Read all available data from socket in chunks
     local chunks = {}
     local chunk_size = big and DEFAULT.EXT_BUF or DEFAULT.MAX_BUF
+    local attempts = 0
+    local max_attempts = 10
+
     repeat
         local chunk = read(self.fd, chunk_size)
         if chunk and #chunk > 0 then
@@ -100,9 +115,16 @@ function Aerospace:_query(args, want_json, big)
         else
             break
         end
-    until #chunk < chunk_size  -- Stop when we get a partial chunk (last chunk)
+        attempts = attempts + 1
+    until #chunk < chunk_size or attempts >= max_attempts  -- Stop when we get a partial chunk (last chunk)
 
     local raw = table.concat(chunks)
+
+    -- Validate we got data
+    if raw == "" or raw:match("^%s*$") then
+        return want_json and {} or ""
+    end
+
     local out = stdout(raw)
     return want_json and decode(out) or out
 end
