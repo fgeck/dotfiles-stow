@@ -244,42 +244,49 @@ check-further-callbacks = false
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Outlook'
 run = [
-  'move-node-to-workspace 3',
+  'move-node-to-workspace 4',
 ]
 
 check-further-callbacks = false
 [[on-window-detected]]
 if.app-id = 'com.microsoft.teams2'
 run = [
-  'move-node-to-workspace 3',
+  'move-node-to-workspace 4',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'com.apple.mail'
 run = [
-  'move-node-to-workspace 4',
+  'move-node-to-workspace 5',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'org.whispersystems.signal-desktop'
 run = [
-  'move-node-to-workspace 4',
+  'move-node-to-workspace 5',
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'org.mozilla.librewolf'
 run = [
-  'move-node-to-workspace 5'
+  'move-node-to-workspace 6'
 ]
 check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'dev.zed.Zed'
 run = [
-  'move-node-to-workspace 6',
+  'move-node-to-workspace 7',
+]
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = [
+    'move-node-to-workspace 7',
 ]
 check-further-callbacks = false
 
