@@ -101,7 +101,8 @@ local function volume_collapse_details()
     local drawing = volume_bracket:query().popup.drawing == "on"
     if not drawing then return end
     volume_bracket:set({ popup = { drawing = false } })
-    sbar.remove('/volume.device\\.*/')
+    -- Suppress warning if no device items exist
+    pcall(function() sbar.remove('/volume.device\\.*/')end)
 end
 
 local current_audio_device = "None"
