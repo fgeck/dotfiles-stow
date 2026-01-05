@@ -1,5 +1,5 @@
-require("items.apple")
-require("items.menus")
+-- require("items.apple")
+-- require("items.menus")
 require("items.workspaces")
 require("items.calendar")
 require("items.vpn")
