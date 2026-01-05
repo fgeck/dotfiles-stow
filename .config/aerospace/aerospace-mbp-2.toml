@@ -89,7 +89,7 @@ on-mode-changed = [
     outer.top = [
         { monitor."built-in" = 0 },
         { monitor."main" = 32 },
-        0
+        32
     ]
     outer.right =      1
 
@@ -291,10 +291,10 @@ run = [
 check-further-callbacks = false
 
 [workspace-to-monitor-force-assignment]
-    1 = 'main' # IntelliJ + iTerm
-    2 = 'main' # Browser
+    1 = 2 # IntelliJ + iTerm
+    2 = 2 # Browser
     3 = 'Built-in Retina Display' # Slack
-    4 = 'secondary' # Teams + Outlook
-    5 = 'main' # Browser 2
-    6 = 'main' # Chat
-    7 = 'main' # Zed + ghostty
+    4 = 3 # Teams + Outlook
+    5 = 2 # Browser 2
+    6 = 2 # Chat
+    7 = 2 # Zed + ghostty
