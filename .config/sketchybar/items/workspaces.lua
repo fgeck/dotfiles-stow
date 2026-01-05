@@ -4,12 +4,67 @@ local app_icons = require("helpers.app_icons")
 
 -- Load AeroSpaceLua
 local Aerospace = require("helpers.aerospace")
-local aerospace = Aerospace.new()
+local aerospace = nil
+local max_retries = 30
+local retry_count = 0
 
--- Wait for AeroSpace connection
-while not aerospace:is_initialized() do
-    os.execute("sleep 0.1")
+-- Wait for AeroSpace connection with retry logic
+while retry_count < max_retries do
+    local success, result = pcall(function()
+        return Aerospace.new()
+    end)
+
+    if success and result:is_initialized() then
+        aerospace = result
+        -- print("[WORKSPACES] Connected to AeroSpace successfully")
+        break
+    else
+        -- print(string.format("[WORKSPACES] Connection attempt %d/%d failed, retrying...", retry_count + 1, max_retries))
+        os.execute("sleep 0.5")
+        retry_count = retry_count + 1
+    end
 end
+
+if not aerospace or not aerospace:is_initialized() then
+    -- print("[WORKSPACES] ERROR: Failed to connect to AeroSpace after " .. max_retries .. " attempts")
+    return
+end
+
+-- Build NSScreen ID to SketchyBar display position mapping (ONCE at startup)
+-- AeroSpace uses NSScreen IDs, SketchyBar uses left-to-right physical positions
+local nsscreen_to_display = {}
+-- print("[WORKSPACES] Building NSScreen to display mapping...")
+aerospace:list_monitors(function(monitors_output)
+    -- print("[WORKSPACES] Monitors output: " .. monitors_output)
+    -- Parse "1 | Monitor Name" format to get left-to-right positions
+    local monitor_names_by_position = {}
+    for line in monitors_output:gmatch("[^\r\n]+") do
+        local position, name = line:match("(%d+)%s*|%s*(.+)")
+        if position and name then
+            monitor_names_by_position[name:match("^%s*(.-)%s*$")] = tonumber(position)
+            -- print(string.format("[WORKSPACES] Position %d = %s", tonumber(position), name))
+        end
+    end
+
+    -- Query workspaces to get NSScreen IDs and build the mapping
+    aerospace:query_workspaces(function(workspace_info)
+        local processed = {}
+        for _, ws in ipairs(workspace_info) do
+            local nsscreen_id = math.floor(ws["monitor-appkit-nsscreen-screens-id"])
+            -- Get monitor name from workspace query
+            local monitor_name = ws["monitor-name"] or ""
+            monitor_name = monitor_name:match("^%s*(.-)%s*$")
+
+            if not processed[nsscreen_id] and monitor_names_by_position[monitor_name] then
+                nsscreen_to_display[nsscreen_id] = monitor_names_by_position[monitor_name]
+                processed[nsscreen_id] = true
+                -- print(string.format("[WORKSPACES] NSScreen %d (%s) -> SketchyBar display %d",
+                --     nsscreen_id, monitor_name, nsscreen_to_display[nsscreen_id]))
+            end
+        end
+        -- print("[WORKSPACES] Mapping complete!")
+    end)
+end)
 
 -- Root is used to handle event subscriptions
 local root = sbar.add("item", { drawing = false })
@@ -97,7 +152,10 @@ local function withWindows(f)
                     if ws["workspace-is-visible"] then
                         table.insert(visible_workspaces, ws)
                     end
-                    workspace_monitors[ws.workspace] = ws["monitor-appkit-nsscreen-screens-id"]
+                    local nsscreen_id = math.floor(ws["monitor-appkit-nsscreen-screens-id"])
+                    local display_id = nsscreen_to_display[nsscreen_id] or nsscreen_id
+                    workspace_monitors[ws.workspace] = display_id
+                    -- print(string.format("[WITHWINDOWS] WS%s: NSScreen %d -> display %d", ws.workspace, nsscreen_id, display_id))
                 end
 
                 f({
@@ -203,10 +261,12 @@ local function updateWorkspaceMonitor()
     aerospace:query_workspaces(function(workspace_info)
         for _, ws in ipairs(workspace_info) do
             local space_index = ws.workspace
-            local monitor_id = math.floor(ws["monitor-appkit-nsscreen-screens-id"])
+            local nsscreen_id = math.floor(ws["monitor-appkit-nsscreen-screens-id"])
+            local display_id = nsscreen_to_display[nsscreen_id] or nsscreen_id
+            -- print(string.format("[UPDATE_MONITOR] WS%s: NSScreen %d -> display %d", space_index, nsscreen_id, display_id))
             if workspaces[space_index] then
                 workspaces[space_index]:set({
-                    display = monitor_id,
+                    display = display_id,
                 })
             end
         end

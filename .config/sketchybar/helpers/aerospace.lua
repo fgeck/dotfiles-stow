@@ -141,7 +141,7 @@ end
 function Aerospace:query_workspaces(cb)
     return passthrough(self, {
         "list-workspaces", "--all",
-        "--format", "%{workspace-is-focused}%{workspace-is-visible}%{workspace}%{monitor-appkit-nsscreen-screens-id}",
+        "--format", "%{workspace-is-focused}%{workspace-is-visible}%{workspace}%{monitor-appkit-nsscreen-screens-id}%{monitor-name}",
         "--json" }, true, true, cb)
 end
 
@@ -170,6 +170,10 @@ end
 function Aerospace:list_modes(current_only, cb)
     local args = current_only and { "list-modes", "--current" } or { "list-modes" }
     return passthrough(self, args, false, nil, cb)
+end
+
+function Aerospace:list_monitors(cb)
+    return passthrough(self, { "list-monitors" }, false, nil, cb)
 end
 
 return Aerospace
