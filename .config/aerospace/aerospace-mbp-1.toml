@@ -243,9 +243,18 @@ check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Outlook'
+if.window-title-regex-substring = 'Reminder'
 run = [
-  'move-node-to-workspace 4',
+    'move-node-to-workspace 3',
 ]
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+run = [
+    'move-node-to-workspace 4',
+]
+check-further-callbacks = true
 
 check-further-callbacks = false
 [[on-window-detected]]
@@ -290,12 +299,17 @@ run = [
 ]
 check-further-callbacks = false
 
-# [workspace-to-monitor-force-assignment]
-#     1 = 'main' # IntelliJ + iTerm
-#     2 = 'main' # Browser
-#     3 = 'Built-in Retina Display' # Slack
-#     4 = 'Built-in Retina Display' # Browser 2
-#     5 = 'Built-in Retina Display' # Chat
+# Floating Apps
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'org.videolan.vlc'
+run = 'layout floating'
+check-further-callbacks = false
+
 [workspace-to-monitor-force-assignment]
     1 = 'main' # IntelliJ + iTerm
     2 = 'main' # Browser

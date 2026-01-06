@@ -243,11 +243,19 @@ check-further-callbacks = false
 
 [[on-window-detected]]
 if.app-id = 'com.microsoft.Outlook'
+if.window-title-regex-substring = 'Reminder'
+run = [
+    'move-node-to-workspace 3',
+]
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
 run = [
     'move-node-to-workspace 4',
 ]
-
 check-further-callbacks = false
+
 [[on-window-detected]]
 if.app-id = 'com.microsoft.teams2'
 run = [
@@ -288,6 +296,17 @@ if.app-id = 'com.mitchellh.ghostty'
 run = [
     'move-node-to-workspace 7',
 ]
+check-further-callbacks = false
+
+# Floating Apps
+[[on-window-detected]]
+if.app-id = 'com.apple.finder'
+run = 'layout floating'
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'org.videolan.vlc'
+run = 'layout floating'
 check-further-callbacks = false
 
 [workspace-to-monitor-force-assignment]

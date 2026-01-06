@@ -50,7 +50,7 @@ local function is_package_line(line)
 end
 
 local function update_brew()
-    local brew_cmd = '/bin/zsh -c "export HOMEBREW_NO_AUTO_UPDATE=1; brew outdated -q"'
+    local brew_cmd = '/bin/zsh -c "brew outdated -q"'
 
     -- print("[BREW OUTDATED] Running command: " .. brew_cmd)
 
