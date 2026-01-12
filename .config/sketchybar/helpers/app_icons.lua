@@ -198,6 +198,7 @@ return {
     ["Obsidian"] = ":obsidian:",
     ["OBS"] = ":obsstudio:",
     ["OmniFocus"] = ":omni_focus:",
+    ["Password Depot"] = ":password_depot:",
     ["1Password"] = ":one_password:",
     ["Open Video Downloader"] = ":open_video_downloader:",
     ["ChatGPT"] = ":openai:",
