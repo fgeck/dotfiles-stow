@@ -33,38 +33,50 @@ end
 -- Build NSScreen ID to SketchyBar display position mapping (ONCE at startup)
 -- AeroSpace uses NSScreen IDs, SketchyBar uses left-to-right physical positions
 local nsscreen_to_display = {}
--- print("[WORKSPACES] Building NSScreen to display mapping...")
-aerospace:list_monitors(function(monitors_output)
-    -- print("[WORKSPACES] Monitors output: " .. monitors_output)
-    -- Parse "1 | Monitor Name" format to get left-to-right positions
+local mapping_complete = false
+local log_file = "/tmp/sketchybar_workspaces.log"
+
+local function log(msg)
+    local f = io.open(log_file, "a")
+    if f then
+        f:write(os.date("%H:%M:%S") .. " " .. msg .. "\n")
+        f:close()
+    end
+end
+
+-- Build the mapping synchronously at startup
+local function build_monitor_mapping()
+    -- Get monitor positions (left-to-right order from aerospace)
+    local monitors_output = aerospace:list_monitors()
     local monitor_names_by_position = {}
     for line in monitors_output:gmatch("[^\r\n]+") do
         local position, name = line:match("(%d+)%s*|%s*(.+)")
         if position and name then
             monitor_names_by_position[name:match("^%s*(.-)%s*$")] = tonumber(position)
-            -- print(string.format("[WORKSPACES] Position %d = %s", tonumber(position), name))
         end
     end
 
     -- Query workspaces to get NSScreen IDs and build the mapping
-    aerospace:query_workspaces(function(workspace_info)
-        local processed = {}
-        for _, ws in ipairs(workspace_info) do
-            local nsscreen_id = math.floor(ws["monitor-appkit-nsscreen-screens-id"])
-            -- Get monitor name from workspace query
-            local monitor_name = ws["monitor-name"] or ""
-            monitor_name = monitor_name:match("^%s*(.-)%s*$")
+    local workspace_info = aerospace:query_workspaces()
+    local processed = {}
+    nsscreen_to_display = {} -- Clear old mapping
+    for _, ws in ipairs(workspace_info) do
+        local nsscreen_id = math.floor(ws["monitor-appkit-nsscreen-screens-id"])
+        local monitor_name = ws["monitor-name"] or ""
+        monitor_name = monitor_name:match("^%s*(.-)%s*$")
 
-            if not processed[nsscreen_id] and monitor_names_by_position[monitor_name] then
-                nsscreen_to_display[nsscreen_id] = monitor_names_by_position[monitor_name]
-                processed[nsscreen_id] = true
-                -- print(string.format("[WORKSPACES] NSScreen %d (%s) -> SketchyBar display %d",
-                --     nsscreen_id, monitor_name, nsscreen_to_display[nsscreen_id]))
-            end
+        if not processed[nsscreen_id] and monitor_names_by_position[monitor_name] then
+            nsscreen_to_display[nsscreen_id] = monitor_names_by_position[monitor_name]
+            processed[nsscreen_id] = true
+            log(string.format("[MAPPING] NSScreen %d (%s) -> display %d", nsscreen_id, monitor_name, nsscreen_to_display[nsscreen_id]))
         end
-        -- print("[WORKSPACES] Mapping complete!")
-    end)
-end)
+    end
+    mapping_complete = true
+    log("[MAPPING] Complete")
+end
+
+-- Build mapping synchronously before anything else
+build_monitor_mapping()
 
 -- Root is used to handle event subscriptions
 local root = sbar.add("item", { drawing = false })
@@ -153,9 +165,12 @@ local function withWindows(f)
                         table.insert(visible_workspaces, ws)
                     end
                     local nsscreen_id = math.floor(ws["monitor-appkit-nsscreen-screens-id"])
-                    local display_id = nsscreen_to_display[nsscreen_id] or nsscreen_id
+                    local display_id = nsscreen_to_display[nsscreen_id]
+                    if not display_id then
+                        log(string.format("[WARNING] No mapping for NSScreen %d (ws %s, monitor %s), falling back", nsscreen_id, ws.workspace, ws["monitor-name"]))
+                        display_id = nsscreen_id
+                    end
                     workspace_monitors[ws.workspace] = display_id
-                    -- print(string.format("[WITHWINDOWS] WS%s: NSScreen %d -> display %d", ws.workspace, nsscreen_id, display_id))
                 end
 
                 f({
@@ -324,6 +339,8 @@ aerospace:query_workspaces(function(workspace_info)
     end)
 
     root:subscribe("display_change", function()
+        -- Rebuild the NSScreen to display mapping when monitors change
+        build_monitor_mapping()
         updateWorkspaceMonitor()
         updateWindows()
     end)

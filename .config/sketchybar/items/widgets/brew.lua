@@ -49,7 +49,7 @@ local function is_package_line(line)
     return true
 end
 
-local function update_brew()
+local function update_brew(env)
     local brew_cmd = '/bin/zsh -c "brew outdated -q"'
 
     -- print("[BREW OUTDATED] Running command: " .. brew_cmd)
@@ -93,6 +93,9 @@ local function update_brew()
 end
 
 brew:subscribe({ "routine", "forced" }, update_brew)
+
+-- Run initial update on load
+update_brew()
 
 local popup_items = {}
 
