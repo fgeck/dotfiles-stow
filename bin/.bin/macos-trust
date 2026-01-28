@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+set -e
+set -u
+set -o pipefail
+
+# Remove macOS quarantine attribute from downloaded files
+# Usage: macos-trust <file>
+
+xattr -d com.apple.quarantine "$@"

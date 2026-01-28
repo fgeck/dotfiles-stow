@@ -1,0 +1,9 @@
+#!/usr/bin/env zsh
+set -e
+set -u
+set -o pipefail
+
+# Show process ID running on specified port
+# Usage: pid-on-port 8080
+
+sudo lsof -n -i :$1

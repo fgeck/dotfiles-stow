@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+set -e
+set -u
+set -o pipefail
+
+# grp - simple grep wrapper
+# Usage:
+#   grp <pattern>        - search current directory recursively
+#   echo | grp <pattern> - search stdin
+
+if [ ! -t 0 ]; then
+    grep --color=auto --fixed-string --ignore-case -n "$*"
+else
+    grep --color=auto --fixed-string --ignore-case --binary-files=without-match -n -r "$*"
+fi

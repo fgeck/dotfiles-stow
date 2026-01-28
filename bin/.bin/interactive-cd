@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+set -e
+set -u
+set -o pipefail
+
+# Interactive directory navigation with fzf
+
+cd "${1:-.}"
+while true; do
+    selected="$(ls -aF | grep -v "^./$" | fzf --preview 'pwd' --height 60% --layout=reverse --preview-window up,1)" || break
+    cd "$selected"
+done
+
+pwd

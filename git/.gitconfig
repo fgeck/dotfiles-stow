@@ -1,0 +1,32 @@
+[user]
+	name = Florian Geckeler
+	# email = set via [include] below or override locally
+
+[include]
+	path = ~/.gitconfig.local
+
+[core]
+	editor = vim
+	pager = delta
+[diff]
+    tool = default-difftool
+[difftool "default-difftool"]
+    cmd = code --wait --diff $LOCAL $REMOTE
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[pager]
+	branch = false
+[delta]
+	navigate = true
+	dark = true
+	side-by-side = true
+	line-numbers = true
+[pull]
+	rebase = false
+[merge]
+    conflictStyle = zdiff3
+[init]
+	defaultBranch = main

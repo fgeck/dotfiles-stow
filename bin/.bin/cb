@@ -1,0 +1,26 @@
+#!/usr/bin/env zsh
+set -e
+set -u
+set -o pipefail
+
+# cb - ClipBoard helper
+# Usage:
+#   cb           - paste from clipboard
+#   cb <file>    - copy file's absolute path to clipboard
+#   echo | cb    - copy stdin to clipboard
+
+paste() {
+    pbpaste
+}
+
+copy() {
+    pbcopy
+}
+
+if [ $# -eq 1 ]; then
+    readlink -f "$1" | xargs echo -n | copy
+elif [ ! -t 0 ]; then
+    copy
+else
+    paste
+fi
