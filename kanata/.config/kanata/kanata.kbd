@@ -1,0 +1,301 @@
+;; ╔═══════════════════════════════════════════════════════════════════════════╗
+;; ║                   MIRYOKU-STYLE LAYOUT FOR KEYCHRON K3                    ║
+;; ║                              macOS Edition                                 ║
+;; ║                                                                            ║
+;; ║                    PHASE 1: Home Row Mods + Nav Layer                      ║
+;; ╚═══════════════════════════════════════════════════════════════════════════╝
+;;
+;; Based on kenkyo's smart charmod template
+;; https://github.com/argenkiwi/kenkyo
+;;
+;; LEARNING PROGRESSION:
+;;   Week 1: Home row mods only (A S D F / J K L ;)
+;;   Week 2: Nav layer (hold Space for arrows)
+;;   Week 3: Uncomment Num layer
+;;   Week 4: Uncomment Sym + Media layers
+
+(defcfg
+  process-unmapped-keys yes
+)
+
+;; Virtual keys for sketchybar notifications (F13-F24)
+;; These are tapped to trigger skhd which updates sketchybar
+(defvirtualkeys
+  f13 f13    ;; Layer: base
+  f14 f14    ;; Layer: nav
+  f15 f15    ;; Layer: num
+  f16 f16    ;; Layer: sym
+  f17 f17    ;; Mod: cmd on
+  f18 f18    ;; Mod: cmd off
+  f19 f19    ;; Mod: alt on
+  f20 f20    ;; Mod: alt off
+  f21 f21    ;; Mod: ctrl on
+  f22 f22    ;; Mod: ctrl off
+  f23 f23    ;; Mod: shift on
+  f24 f24    ;; Mod: shift off
+)
+
+;; Physical key mapping
+(defsrc
+  q    w    e    r    t    y    u    i    o    p
+  a    s    d    f    g    h    j    k    l    ;
+  z    x    c    v    b    n    m    ,    .    /
+            lmet      spc       rmet
+)
+
+;; ┌─────────────────────────────────────────────────────────────────────────────┐
+;; │ TIMING CONFIGURATION                                                        │
+;; ├─────────────────────────────────────────────────────────────────────────────┤
+;; │ streak-count/time: Skip hold behavior if typing fast (prevents misfires)   │
+;; │ tap-timeout: Max time for a tap (ms)                                        │
+;; │ hold-timeout: Time before hold activates (ms)                               │
+;; └─────────────────────────────────────────────────────────────────────────────┘
+(defvar
+  streak-count 3
+  streak-time 325
+  tap-timeout 200
+  hold-timeout 200
+)
+
+;; Smart charmod template from kenkyo
+;; If typing fast (3+ keys in 325ms), just output the character
+;; Otherwise, use tap-hold behavior
+(deftemplate charmod (char mod)
+  (switch
+    ((key-timing $streak-count less-than $streak-time)) $char break
+    () (tap-hold-release $tap-timeout $hold-timeout $char $mod) break
+  )
+)
+
+;; Layer-tap template (for thumb keys)
+(deftemplate layertap (char layer)
+  (tap-hold-release $tap-timeout $hold-timeout $char (layer-while-held $layer))
+)
+
+;; ┌─────────────────────────────────────────────────────────────────────────────┐
+;; │ SKETCHYBAR INTEGRATION                                                      │
+;; ├─────────────────────────────────────────────────────────────────────────────┤
+;; │ F13-F16: Layer indicators (skhd triggers sketchybar)                        │
+;; │ F17-F24: Modifier indicators                                                │
+;; │   F13=base, F14=nav, F15=num, F16=sym                                       │
+;; │   F17/F18=cmd on/off, F19/F20=alt, F21/F22=ctrl, F23/F24=shift              │
+;; └─────────────────────────────────────────────────────────────────────────────┘
+
+;; Modifier with F-key notification for sketchybar
+(deftemplate charmod-notify (char mod f-on f-off)
+  (switch
+    ((key-timing $streak-count less-than $streak-time)) $char break
+    () (tap-hold-release $tap-timeout $hold-timeout
+         $char
+         (multi (on-press tap-vkey $f-on) $mod (on-release tap-vkey $f-off))) break
+  )
+)
+
+;; Layer switch with F-key notification
+(deftemplate layertap-notify (char layer f-key f-base)
+  (tap-hold-release $tap-timeout $hold-timeout
+    $char
+    (multi (on-press tap-vkey $f-key) (layer-while-held $layer) (on-release tap-vkey $f-base)))
+)
+
+;; ╔═══════════════════════════════════════════════════════════════════════════╗
+;; ║                              MAIN LAYER                                    ║
+;; ╠═══════════════════════════════════════════════════════════════════════════╣
+;; ║                                                                            ║
+;; ║  ┌───────┬───────┬───────┬───────┬───────┐ ┌───────┬───────┬───────┬───────┬───────┐  ║
+;; ║  │       │       │       │       │       │ │       │       │       │       │       │  ║
+;; ║  │   Q   │   W   │   E   │   R   │   T   │ │   Y   │   U   │   I   │   O   │   P   │  ║
+;; ║  │       │       │       │       │       │ │       │       │       │       │       │  ║
+;; ║  ├───────┼───────┼───────┼───────┼───────┤ ├───────┼───────┼───────┼───────┼───────┤  ║
+;; ║  │   a   │   s   │   d   │   f   │       │ │       │   j   │   k   │   l   │   ;   │  ║
+;; ║  │   A   │   S   │   D   │   F   │   G   │ │   H   │   J   │   K   │   L   │   ;   │  ║
+;; ║  │  ⌘    │  ⌥    │  ⌃    │  ⇧    │       │ │       │  ⇧    │  ⌃    │  ⌥    │  ⌘    │  ║
+;; ║  ├───────┼───────┼───────┼───────┼───────┤ ├───────┼───────┼───────┼───────┼───────┤  ║
+;; ║  │       │       │       │       │       │ │       │       │       │       │       │  ║
+;; ║  │   Z   │   X   │   C   │   V   │   B   │ │   N   │   M   │   ,   │   .   │   /   │  ║
+;; ║  │       │       │       │       │       │ │       │       │       │       │       │  ║
+;; ║  └───────┴───────┴───────┴───────┴───────┘ └───────┴───────┴───────┴───────┴───────┘  ║
+;; ║                                                                                       ║
+;; ║  ┌────────────────────────────────────────────────────────────────────────────────┐  ║
+;; ║  │                              THUMB KEYS                                        │  ║
+;; ║  ├──────────┬──────────┬──────────────────────────────┬──────────┬────────────────┤  ║
+;; ║  │          │          │            SPACE             │          │                │  ║
+;; ║  │   Ctrl   │   Opt    │         tap: Space           │   Cmd    │      Ctrl      │  ║
+;; ║  │          │          │         hold: NAV            │ (normal) │                │  ║
+;; ║  └──────────┴──────────┴──────────────────────────────┴──────────┴────────────────┘  ║
+;; ║                                                                                       ║
+;; ║  tap  = character        hold = modifier/layer                                        ║
+;; ║                                                                                       ║
+;; ╚═══════════════════════════════════════════════════════════════════════════╝
+
+(deflayer main
+  q    w    e    r    t    y    u    i    o    p
+  @a   @s   @d   @f   g    h    @j   @k   @l   @;
+  z    x    c    v    b    n    m    ,    .    /
+            lmet      @spc      rmet
+)
+
+;; Home row mods (GACS - Gui, Alt, Ctrl, Shift) with sketchybar notifications
+(defalias
+  a (t! charmod-notify a lmet f17 f18)    ;; A = Cmd (⌘)   F17/F18
+  s (t! charmod-notify s lalt f19 f20)    ;; S = Alt (⌥)   F19/F20
+  d (t! charmod-notify d lctl f21 f22)    ;; D = Ctrl (⌃)  F21/F22
+  f (t! charmod-notify f lsft f23 f24)    ;; F = Shift (⇧) F23/F24
+  j (t! charmod-notify j rsft f23 f24)    ;; J = Shift (⇧) F23/F24
+  k (t! charmod-notify k rctl f21 f22)    ;; K = Ctrl (⌃)  F21/F22
+  l (t! charmod-notify l lalt f19 f20)    ;; L = Alt (⌥)   F19/F20
+  ; (t! charmod-notify ; rmet f17 f18)    ;; ; = Cmd (⌘)   F17/F18
+)
+
+;; Thumb key - Space activates Nav layer on hold (with sketchybar notification)
+(defalias
+  spc (t! layertap-notify spc nav f14 f13)  ;; F14=nav, F13=base
+)
+
+;; ╔═══════════════════════════════════════════════════════════════════════════╗
+;; ║                             NAV LAYER                                      ║
+;; ║                           (Hold Space)                                     ║
+;; ╠═══════════════════════════════════════════════════════════════════════════╣
+;; ║                                                                            ║
+;; ║  ┌───────┬───────┬───────┬───────┬───────┐ ┌───────┬───────┬───────┬───────┬───────┐  ║
+;; ║  │       │       │       │       │       │ │       │       │   ↑   │       │       │  ║
+;; ║  │   -   │   -   │   -   │   -   │   -   │ │ Undo  │ Home  │   I   │  End  │ PgUp  │  ║
+;; ║  │       │       │       │       │       │ │  ⌘Z   │       │       │       │       │  ║
+;; ║  ├───────┼───────┼───────┼───────┼───────┤ ├───────┼───────┼───────┼───────┼───────┤  ║
+;; ║  │  ⌘    │  ⌥    │  ⌃    │  ⇧    │       │ │       │   ←   │   ↓   │   →   │       │  ║
+;; ║  │   A   │   S   │   D   │   F   │   -   │ │  Esc  │   J   │   K   │   L   │ PgDn  │  ║
+;; ║  │ hold  │ hold  │ hold  │ hold  │       │ │       │       │       │       │       │  ║
+;; ║  ├───────┼───────┼───────┼───────┼───────┤ ├───────┼───────┼───────┼───────┼───────┤  ║
+;; ║  │       │       │       │       │       │ │       │       │       │       │       │  ║
+;; ║  │   -   │   -   │   -   │   -   │   -   │ │  Tab  │ Bspc  │  Spc  │  Del  │ Enter │  ║
+;; ║  │       │       │       │       │       │ │       │       │       │       │       │  ║
+;; ║  └───────┴───────┴───────┴───────┴───────┘ └───────┴───────┴───────┴───────┴───────┘  ║
+;; ║                                                                                       ║
+;; ║  LEFT HAND: hold modifiers          RIGHT HAND: tap navigation                        ║
+;; ║                                                                                       ║
+;; ╚═══════════════════════════════════════════════════════════════════════════╝
+
+(deflayer nav
+  _    _    _    _    _    C-z  home up   end  pgup
+  lmet lalt lctl lsft _    esc  left down rght pgdn
+  _    _    _    _    _    tab  bspc spc  del  ret
+            _         _         _
+)
+
+;; ╔═══════════════════════════════════════════════════════════════════════════╗
+;; ║                              QUICK REFERENCE                               ║
+;; ╠═══════════════════════════════════════════════════════════════════════════╣
+;; ║                                                                            ║
+;; ║  HOME ROW MODS (tap = letter, hold = modifier)                             ║
+;; ║  ┌──────┬──────┬──────┬──────┐    ┌──────┬──────┬──────┬──────┐            ║
+;; ║  │  A   │  S   │  D   │  F   │    │  J   │  K   │  L   │  ;   │            ║
+;; ║  │  ⌘   │  ⌥   │  ⌃   │  ⇧   │    │  ⇧   │  ⌃   │  ⌥   │  ⌘   │            ║
+;; ║  └──────┴──────┴──────┴──────┘    └──────┴──────┴──────┴──────┘            ║
+;; ║                                                                            ║
+;; ║  NAV LAYER (hold Space)                                                    ║
+;; ║  ┌──────┬──────┬──────┬──────┬──────┬──────┬──────┐                        ║
+;; ║  │  Y   │  U   │  I   │  O   │  J   │  K   │  L   │                        ║
+;; ║  │ Undo │ Home │  ↑   │ End  │  ←   │  ↓   │  →   │                        ║
+;; ║  └──────┴──────┴──────┴──────┴──────┴──────┴──────┘                        ║
+;; ║                                                                            ║
+;; ╠═══════════════════════════════════════════════════════════════════════════╣
+;; ║                          TEXT SELECTION                                    ║
+;; ╠═══════════════════════════════════════════════════════════════════════════╣
+;; ║                                                                            ║
+;; ║  Navigation (hold Space, tap right hand):                                  ║
+;; ║  ┌──────────────────┬─────────────────────┐                                ║
+;; ║  │ → right          │ Space + L           │                                ║
+;; ║  │ ← left           │ Space + J           │                                ║
+;; ║  │ ↑ up             │ Space + I           │                                ║
+;; ║  │ ↓ down           │ Space + K           │                                ║
+;; ║  │ → word           │ S + Space + L       │                                ║
+;; ║  │ ← word           │ S + Space + J       │                                ║
+;; ║  │ → line end       │ Space + O           │                                ║
+;; ║  │ ← line start     │ Space + U           │                                ║
+;; ║  └──────────────────┴─────────────────────┘                                ║
+;; ║                                                                            ║
+;; ║  Selection (add D for Shift):                                              ║
+;; ║  ┌──────────────────┬─────────────────────┐                                ║
+;; ║  │ Select → char    │ D + Space + L       │                                ║
+;; ║  │ Select ← char    │ D + Space + J       │                                ║
+;; ║  │ Select → word    │ D + S + Space + L   │                                ║
+;; ║  │ Select ← word    │ D + S + Space + J   │                                ║
+;; ║  │ Select → to EOL  │ D + A + Space + O   │                                ║
+;; ║  │ Select ← to BOL  │ D + A + Space + U   │                                ║
+;; ║  │ Select line ↓    │ D + Space + K       │                                ║
+;; ║  └──────────────────┴─────────────────────┘                                ║
+;; ║                                                                            ║
+;; ║  IDE Line Movement (Shift+Alt = D+S):                                      ║
+;; ║  ┌──────────────────┬─────────────────────┐                                ║
+;; ║  │ Move line ↑      │ D + S + Space + I   │                                ║
+;; ║  │ Move line ↓      │ D + S + Space + K   │                                ║
+;; ║  └──────────────────┴─────────────────────┘                                ║
+;; ║                                                                            ║
+;; ╠═══════════════════════════════════════════════════════════════════════════╣
+;; ║                         COMMON SHORTCUTS                                   ║
+;; ╠═══════════════════════════════════════════════════════════════════════════╣
+;; ║  ┌──────────────────┬─────────────────────┐                                ║
+;; ║  │ Copy   (⌘C)      │ hold A, tap C       │                                ║
+;; ║  │ Paste  (⌘V)      │ hold A, tap V       │                                ║
+;; ║  │ Cut    (⌘X)      │ hold A, tap X       │                                ║
+;; ║  │ Undo   (⌘Z)      │ hold A, tap Z       │                                ║
+;; ║  │ Save   (⌘S)      │ hold ;, tap S       │                                ║
+;; ║  │ Find   (⌘F)      │ hold ;, tap F       │                                ║
+;; ║  │ Select All (⌘A)  │ hold ;, tap A       │                                ║
+;; ║  │ Close Tab (⌘W)   │ hold A, tap W       │                                ║
+;; ║  │ Quit   (⌘Q)      │ hold A, tap Q       │                                ║
+;; ║  │ Switch App (⌘Tab)│ hold A, tap Tab     │                                ║
+;; ║  └──────────────────┴─────────────────────┘                                ║
+;; ║                                                                            ║
+;; ╚═══════════════════════════════════════════════════════════════════════════╝
+
+;; ═══════════════════════════════════════════════════════════════════════════════
+;; PHASE 2: Uncomment when ready for numbers (Week 3)
+;; ═══════════════════════════════════════════════════════════════════════════════
+;;
+;; Add to main layer: change "rmet" to "@rthumb"
+;;
+;; (defalias
+;;   rthumb (t! layertap bspc num)
+;; )
+;;
+;; (deflayer num
+;;   grv  1    2    3    min  _    _    _    _    _
+;;   0    4    5    6    eql  _    rsft rctl lalt rmet
+;;   \    7    8    9    [    _    _    _    ]    _
+;;             _         _         _
+;; )
+
+;; ═══════════════════════════════════════════════════════════════════════════════
+;; PHASE 3: Uncomment when ready for symbols (Week 4)
+;; ═══════════════════════════════════════════════════════════════════════════════
+;;
+;; Add to main layer: change "v" to "@v"
+;;
+;; (defalias
+;;   v (t! layertap v sym)
+;; )
+;;
+;; (deflayer sym
+;;   S-grv S-1  S-2  S-3  S-min _    _    _    _    _
+;;   S-0   S-4  S-5  S-6  S-eql _    rsft rctl lalt rmet
+;;   S-\   S-7  S-8  S-9  S-[   _    _    _    S-]  _
+;;             _         _         _
+;; )
+
+;; ═══════════════════════════════════════════════════════════════════════════════
+;; PHASE 4: Uncomment when ready for media (Week 4)
+;; ═══════════════════════════════════════════════════════════════════════════════
+;;
+;; Add to main layer: change "lmet" to "@lthumb"
+;;
+;; (defalias
+;;   lthumb (t! layertap esc media)
+;; )
+;;
+;; (deflayer media
+;;   _    _    _    _    _    _    _    volu _    brup
+;;   _    _    _    _    _    _    prev vold next brdn
+;;   _    _    _    _    _    _    _    mute pp   _
+;;             _         _         _
+;; )

@@ -22,11 +22,11 @@ fi
 mkdir -p ~/.config/zsh ~/.config/gh ~/.config/tmux
 
 # Stow all packages
-packages=(brew zsh git starship bin aerospace borders ghostty tmux nvim sketchybar gh scripts)
+packages=(brew zsh git starship bin aerospace borders ghostty tmux nvim sketchybar skhd kanata gh scripts)
 
 for pkg in "${packages[@]}"; do
   echo "Stowing $pkg..."
-  stow -v "$pkg"
+  stow -v --no-folding -t "$HOME" "$pkg"
 done
 
 # Install tmux plugin manager if not present

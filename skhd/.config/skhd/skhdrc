@@ -1,0 +1,41 @@
+# ============================================================================
+# skhd configuration
+# ============================================================================
+# Hotkey daemon for macOS
+# Used primarily for keyboard layer/modifier indicators in sketchybar
+#
+# Note: Window management is handled by AeroSpace, not skhd
+# ============================================================================
+
+# ============================================================================
+# Keyboard Layer Indicators (F13-F16)
+# ============================================================================
+# Triggered by Kanata or QMK when layer changes
+# Updates sketchybar keyboard widget
+
+f13 : sketchybar --trigger kbd_layer LAYER=base
+f14 : sketchybar --trigger kbd_layer LAYER=nav
+f15 : sketchybar --trigger kbd_layer LAYER=num
+f16 : sketchybar --trigger kbd_layer LAYER=sym
+
+# ============================================================================
+# Modifier Indicators (F17-F24)
+# ============================================================================
+# Triggered by Kanata or QMK when modifier pressed/released
+# Updates sketchybar modifier display
+
+# Cmd (⌘)
+f17 : sketchybar --trigger kbd_mod MOD=cmd STATE=on
+f18 : sketchybar --trigger kbd_mod MOD=cmd STATE=off
+
+# Alt (⌥)
+f19 : sketchybar --trigger kbd_mod MOD=alt STATE=on
+f20 : sketchybar --trigger kbd_mod MOD=alt STATE=off
+
+# Ctrl (⌃)
+f21 : sketchybar --trigger kbd_mod MOD=ctrl STATE=on
+f22 : sketchybar --trigger kbd_mod MOD=ctrl STATE=off
+
+# Shift (⇧)
+f23 : sketchybar --trigger kbd_mod MOD=shift STATE=on
+f24 : sketchybar --trigger kbd_mod MOD=shift STATE=off
