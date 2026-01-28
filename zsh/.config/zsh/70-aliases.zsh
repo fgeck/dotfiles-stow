@@ -2,7 +2,7 @@
 
 # ---- File listing (eza/bat) ----
 alias l='eza --icons --group-directories-first -l'
-alias ll='eza --icons --group-directories-first -l'
+alias ll='eza --icons --group-directories-first -lah'
 alias ls='eza --icons --group-directories-first'
 alias la='ls -lah'
 alias lh=la
