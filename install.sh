@@ -14,7 +14,7 @@ fi
 mkdir -p ~/.config/zsh ~/.config/gh ~/.config/tmux
 
 # Stow all packages
-packages=(zsh git starship bin aerospace borders ghostty tmux nvim sketchybar gh)
+packages=(zsh git starship bin aerospace borders ghostty tmux nvim sketchybar gh scripts)
 
 for pkg in "${packages[@]}"; do
   echo "Stowing $pkg..."
