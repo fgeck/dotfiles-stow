@@ -3,6 +3,14 @@ set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "$0")" && pwd)"
 
+# Ask about brew packages
+read -p "Install brew packages from Brewfile? [y/N] " -n 1 -r
+echo
+if [[ $REPLY =~ ^[Yy]$ ]]; then
+  echo "Installing brew packages..."
+  brew bundle --file="$DOTFILES_DIR/Brewfile"
+fi
+
 # Check for stow
 if ! command -v stow &> /dev/null; then
   echo "GNU Stow not found. Install with: brew install stow"

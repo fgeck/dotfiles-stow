@@ -10,32 +10,36 @@ dotfiles/
 ├── git/         # Git configuration
 ├── starship/    # Starship prompt theme
 ├── bin/         # Custom shell scripts
+├── scripts/     # Setup scripts (macOS defaults)
 ├── aerospace/   # Aerospace tiling window manager
 ├── borders/     # Window borders for aerospace
 ├── ghostty/     # Ghostty terminal config
 ├── tmux/        # Tmux config
-├── nvim/        # Neovim config (LazyVim-based)
+├── nvim/        # Neovim config
 ├── sketchybar/  # Sketchybar status bar
-└── gh/          # GitHub CLI config
+├── gh/          # GitHub CLI config
+└── Brewfile     # Homebrew packages
 ```
 
 ## Install
 
 ```bash
 # Clone
-git clone https://github.com/fgeck/dotfiles.git ~/dotfiles
+git clone https://github.com/fgeck/dotfiles-stow.git ~/dotfiles
 
-# Install dependencies
-brew install stow starship zsh-autosuggestions zsh-syntax-highlighting fzf-tab zoxide
-brew install --cask ghostty
-brew install tmux neovim aerospace borders sketchybar gh
-
-# Stow everything
+# Install all brew packages + stow configs
 cd ~/dotfiles
-./install.sh
+./install.sh --brew
 
-# Or stow individual packages
-stow zsh git starship
+# Or just stow configs (if brew packages already installed)
+./install.sh
+```
+
+## Brewfile
+
+Install all packages with:
+```bash
+brew bundle --file=Brewfile
 ```
 
 ## How it works
@@ -55,4 +59,3 @@ ln -sf aerospace-mba.toml aerospace.toml    # MacBook Air
 ln -sf aerospace-mbp-1.toml aerospace.toml  # MBP + 1 monitor
 ln -sf aerospace-mbp-2.toml aerospace.toml  # MBP + 2 monitors
 ```
-
