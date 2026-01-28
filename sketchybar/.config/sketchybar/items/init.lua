@@ -1,5 +1,6 @@
 -- require("items.apple")
 -- require("items.menus")
+require("items.keyboard")
 require("items.workspaces")
 require("items.calendar")
 require("items.vpn")
