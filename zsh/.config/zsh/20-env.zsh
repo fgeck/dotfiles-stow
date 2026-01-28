@@ -1,4 +1,5 @@
 # Environment Variables
+export DOTFILES="$HOME/.dotfiles"
 export TERM=xterm-256color
 export GOPATH=$HOME/go
 export GOARCH=arm64

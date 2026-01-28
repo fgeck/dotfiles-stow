@@ -37,6 +37,8 @@ alias gs='git status'
 alias gf='git fetch'
 alias gpl='git pull'
 alias ga='git add'
+alias gaa='git add --all'
+alias gau='git add --updated'
 alias gl="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
 alias glg="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
 alias lg1="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
@@ -77,6 +79,29 @@ alias ij='idea .'
 alias -g G='| grep'
 alias -g M='| less'
 alias -g L='| wc -l'
+
+# ---- Homebrew ----
+# Wrapper to auto-update Brewfile on install/tap
+brew() {
+  local brewfile="$HOME/.config/homebrew/Brewfile"
+  case "$1" in
+    install)
+      command brew "$@" && {
+        if [[ "$2" == "--cask" ]]; then
+          echo "cask \"$3\"" >> "$brewfile"
+        else
+          echo "brew \"$2\"" >> "$brewfile"
+        fi
+      }
+      ;;
+    tap)
+      command brew "$@" && echo "tap \"$2\"" >> "$brewfile"
+      ;;
+    *)
+      command brew "$@"
+      ;;
+  esac
+}
 
 # ---- Navigation ----
 cddev() {

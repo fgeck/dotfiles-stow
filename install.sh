@@ -8,7 +8,7 @@ read -p "Install brew packages from Brewfile? [y/N] " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then
   echo "Installing brew packages..."
-  brew bundle --file="$DOTFILES_DIR/Brewfile"
+  brew bundle --global  # uses ~/.config/homebrew/Brewfile
 fi
 
 # Check for stow
@@ -22,7 +22,7 @@ fi
 mkdir -p ~/.config/zsh ~/.config/gh ~/.config/tmux
 
 # Stow all packages
-packages=(zsh git starship bin aerospace borders ghostty tmux nvim sketchybar gh scripts)
+packages=(brew zsh git starship bin aerospace borders ghostty tmux nvim sketchybar gh scripts)
 
 for pkg in "${packages[@]}"; do
   echo "Stowing $pkg..."
