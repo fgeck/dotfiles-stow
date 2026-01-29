@@ -2,7 +2,7 @@
 -- Displays current keyboard layer (Nav/Num/Sym) and active modifiers (⌘⌥⌃⇧)
 --
 -- Events:
---   kbd_layer: LAYER=base|nav|num|sym
+--   kbd_layer: LAYER=main|nav|num|sym
 --   kbd_mod:   MOD=cmd|alt|ctrl|shift STATE=on|off
 --
 -- Test manually:
@@ -13,9 +13,9 @@
 local colors = require("colors")
 local settings = require("settings")
 
--- Layer colors
+-- Layer colors (main = default layer from kanata)
 local layer_colors = {
-    base = colors.white,
+    main = colors.white,
     nav = colors.red,
     num = colors.green,
     sym = colors.blue,
@@ -23,7 +23,7 @@ local layer_colors = {
 
 -- Layer symbols (SF Symbols without circles)
 local layer_symbols = {
-    base = "􀅏",            -- a (U+10014F)
+    main = "􀅏",            -- a (U+10014F)
     nav = "􀄨",             -- arrow.up
     num = "􀆃",             -- number (U+100183)
     sym = "􀅷",             -- at (U+100177)
@@ -38,7 +38,7 @@ local active_mods = {
 }
 
 -- Track current layer
-local current_layer = "base"
+local current_layer = "main"
 
 -- Single keyboard item: icon = keyboard symbol, label = layer indicator
 local keyboard = sbar.add("item", "keyboard", {
@@ -101,7 +101,7 @@ end
 
 -- Subscribe to layer change events
 keyboard:subscribe("kbd_layer", function(env)
-    local layer = env.LAYER or "base"
+    local layer = env.LAYER or "main"
     current_layer = layer
     update_display()
 end)

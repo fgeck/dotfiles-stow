@@ -7,3 +7,6 @@ if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
 else
   compinit -C
 fi
+
+# Case-insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
