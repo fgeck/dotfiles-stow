@@ -71,56 +71,29 @@ local keyboard = sbar.add("item", "keyboard", {
     },
 })
 
--- Modifier indicator (separate, only shows when mods are active)
-local mod_indicator = sbar.add("item", "keyboard.mods", {
-    position = "left",
-    drawing = false,  -- Hidden by default, shown when mods active
-    icon = {
-        string = "",
-        font = {
-            family = settings.font.text,
-            style = settings.font.style_map["Regular"],
-            size = 12.0,
-        },
-        color = colors.white,
-        padding_left = 0,
-        padding_right = 8,
-    },
-    label = { drawing = false },
-    background = {
-        color = colors.bg1,
-        drawing = true,
-    },
-})
 
--- Update modifier display
-local function update_mods()
+-- Update display (layer + modifiers combined)
+local function update_display()
+    local symbol = layer_symbols[current_layer] or "A"
+    local color = layer_colors[current_layer] or colors.white
+
+    -- Build modifier string
     local mod_string = ""
-    -- Order: cmd, alt, ctrl, shift (⌘⌥⌃⇧)
     if active_mods.cmd then mod_string = mod_string .. "⌘" end
     if active_mods.alt then mod_string = mod_string .. "⌥" end
     if active_mods.ctrl then mod_string = mod_string .. "⌃" end
     if active_mods.shift then mod_string = mod_string .. "⇧" end
 
-    -- Only show when mods are active
-    local has_mods = mod_string ~= ""
-    mod_indicator:set({
-        drawing = has_mods,
-        icon = {
-            string = mod_string,
-        },
-    })
-end
-
--- Update layer display
-local function update_layer()
-    local symbol = layer_symbols[current_layer] or "A"
-    local color = layer_colors[current_layer] or colors.white
+    -- Combine: layer symbol + modifiers (e.g., "A ⌘" or "↑ ⌘⌥")
+    local label = symbol
+    if mod_string ~= "" then
+        label = symbol .. " " .. mod_string
+    end
 
     keyboard:set({
         icon = { color = color },
         label = {
-            string = symbol,
+            string = label,
             color = color,
         },
     })
@@ -130,20 +103,19 @@ end
 keyboard:subscribe("kbd_layer", function(env)
     local layer = env.LAYER or "base"
     current_layer = layer
-    update_layer()
+    update_display()
 end)
 
 -- Subscribe to modifier change events
-mod_indicator:subscribe("kbd_mod", function(env)
+keyboard:subscribe("kbd_mod", function(env)
     local mod = env.MOD
     local state = env.STATE
 
     if mod and active_mods[mod] ~= nil then
         active_mods[mod] = (state == "on")
-        update_mods()
+        update_display()
     end
 end)
 
 -- Initialize display
-update_layer()
-update_mods()
+update_display()

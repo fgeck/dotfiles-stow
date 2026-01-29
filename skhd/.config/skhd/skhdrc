@@ -1,41 +1,22 @@
 # ============================================================================
 # skhd configuration
 # ============================================================================
-# Hotkey daemon for macOS
-# Used primarily for keyboard layer/modifier indicators in sketchybar
-#
-# Note: Window management is handled by AeroSpace, not skhd
+# Hotkey daemon for macOS - keyboard layer/modifier indicators for sketchybar
+# Uses hyper combos (ctrl+alt+shift+cmd+key) to avoid blocking useful keys
 # ============================================================================
 
-# ============================================================================
-# Keyboard Layer Indicators (F13-F16)
-# ============================================================================
-# Triggered by Kanata or QMK when layer changes
-# Updates sketchybar keyboard widget
+# Layer indicators (hyper+b=base, hyper+n=nav)
+ctrl + alt + shift + cmd - b : sketchybar --trigger kbd_layer LAYER=base
+ctrl + alt + shift + cmd - n : sketchybar --trigger kbd_layer LAYER=nav
 
-f13 : sketchybar --trigger kbd_layer LAYER=base
-f14 : sketchybar --trigger kbd_layer LAYER=nav
-f15 : sketchybar --trigger kbd_layer LAYER=num
-f16 : sketchybar --trigger kbd_layer LAYER=sym
+# Modifier ON indicators (combo excludes the modifier being activated)
+alt + ctrl + shift - q : sketchybar --trigger kbd_mod MOD=cmd STATE=on
+ctrl + cmd + shift - w : sketchybar --trigger kbd_mod MOD=alt STATE=on
+alt + cmd + shift - e : sketchybar --trigger kbd_mod MOD=ctrl STATE=on
+ctrl + alt + cmd - t : sketchybar --trigger kbd_mod MOD=shift STATE=on
 
-# ============================================================================
-# Modifier Indicators (F17-F24)
-# ============================================================================
-# Triggered by Kanata or QMK when modifier pressed/released
-# Updates sketchybar modifier display
-
-# Cmd (⌘)
-f17 : sketchybar --trigger kbd_mod MOD=cmd STATE=on
-f18 : sketchybar --trigger kbd_mod MOD=cmd STATE=off
-
-# Alt (⌥)
-f19 : sketchybar --trigger kbd_mod MOD=alt STATE=on
-f20 : sketchybar --trigger kbd_mod MOD=alt STATE=off
-
-# Ctrl (⌃)
-f21 : sketchybar --trigger kbd_mod MOD=ctrl STATE=on
-f22 : sketchybar --trigger kbd_mod MOD=ctrl STATE=off
-
-# Shift (⇧)
-f23 : sketchybar --trigger kbd_mod MOD=shift STATE=on
-f24 : sketchybar --trigger kbd_mod MOD=shift STATE=off
+# Modifier OFF indicators (hyper+1=cmd, hyper+2=alt, hyper+3=ctrl, hyper+4=shift)
+ctrl + alt + shift + cmd - 1 : sketchybar --trigger kbd_mod MOD=cmd STATE=off
+ctrl + alt + shift + cmd - 2 : sketchybar --trigger kbd_mod MOD=alt STATE=off
+ctrl + alt + shift + cmd - 3 : sketchybar --trigger kbd_mod MOD=ctrl STATE=off
+ctrl + alt + shift + cmd - 4 : sketchybar --trigger kbd_mod MOD=shift STATE=off

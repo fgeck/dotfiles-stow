@@ -18,21 +18,22 @@
   process-unmapped-keys yes
 )
 
-;; Virtual keys for sketchybar notifications (F13-F24)
-;; These are tapped to trigger skhd which updates sketchybar
+;; Virtual keys for sketchybar notifications
+;; Layers: F13=base, F16=nav
+;; Modifiers: F17=cmd-on, F18=cmd-off, F19=alt-on, F20=alt-off
+;; Virtual keys using hyper combos (ctrl+alt+shift+cmd+key)
+;; These are impossible to press accidentally
 (defvirtualkeys
-  f13 f13    ;; Layer: base
-  f14 f14    ;; Layer: nav
-  f15 f15    ;; Layer: num
-  f16 f16    ;; Layer: sym
-  f17 f17    ;; Mod: cmd on
-  f18 f18    ;; Mod: cmd off
-  f19 f19    ;; Mod: alt on
-  f20 f20    ;; Mod: alt off
-  f21 f21    ;; Mod: ctrl on
-  f22 f22    ;; Mod: ctrl off
-  f23 f23    ;; Mod: shift on
-  f24 f24    ;; Mod: shift off
+  layer-base (macro S-C-A-M-b)   ;; hyper+b = base layer
+  layer-nav (macro S-C-A-M-n)    ;; hyper+n = nav layer
+  mod-cmd-on (macro A-C-S-q)     ;; alt+ctrl+shift+q = cmd on (no cmd in combo!)
+  mod-cmd-off (macro S-C-A-M-1)  ;; hyper+1 = cmd off
+  mod-alt-on (macro C-M-S-w)     ;; ctrl+cmd+shift+w = alt on (no alt in combo!)
+  mod-alt-off (macro S-C-A-M-2)  ;; hyper+2 = alt off
+  mod-ctrl-on (macro A-M-S-e)    ;; alt+cmd+shift+e = ctrl on (no ctrl in combo!)
+  mod-ctrl-off (macro S-C-A-M-3) ;; hyper+3 = ctrl off
+  mod-sft-on (macro C-A-M-t)     ;; ctrl+alt+cmd+t = shift on (no shift in combo!)
+  mod-sft-off (macro S-C-A-M-4)  ;; hyper+4 = shift off
 )
 
 ;; Physical key mapping
@@ -75,27 +76,22 @@
 ;; ┌─────────────────────────────────────────────────────────────────────────────┐
 ;; │ SKETCHYBAR INTEGRATION                                                      │
 ;; ├─────────────────────────────────────────────────────────────────────────────┤
-;; │ F13-F16: Layer indicators (skhd triggers sketchybar)                        │
-;; │ F17-F24: Modifier indicators                                                │
-;; │   F13=base, F14=nav, F15=num, F16=sym                                       │
-;; │   F17/F18=cmd on/off, F19/F20=alt, F21/F22=ctrl, F23/F24=shift              │
+;; │ Layer: F13=base, F16=nav                                                    │
+;; │ Modifiers: F17/F18=cmd, F19/F20=alt                                         │
+;; │ (F14/F15 skipped - they're brightness keys on macOS)                        │
 ;; └─────────────────────────────────────────────────────────────────────────────┘
 
-;; Modifier with F-key notification for sketchybar
-(deftemplate charmod-notify (char mod f-on f-off)
+;; Charmod with sketchybar notification using virtualkeys
+(deftemplate charmod-notify (char mod vk-on vk-off)
   (switch
     ((key-timing $streak-count less-than $streak-time)) $char break
     () (tap-hold-release $tap-timeout $hold-timeout
          $char
-         (multi (on-press tap-vkey $f-on) $mod (on-release tap-vkey $f-off))) break
+         (multi
+           (on-press tap-vkey $vk-on)
+           $mod
+           (on-release tap-vkey $vk-off))) break
   )
-)
-
-;; Layer switch with F-key notification
-(deftemplate layertap-notify (char layer f-key f-base)
-  (tap-hold-release $tap-timeout $hold-timeout
-    $char
-    (multi (on-press tap-vkey $f-key) (layer-while-held $layer) (on-release tap-vkey $f-base)))
 )
 
 ;; ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -135,21 +131,35 @@
             lmet      @spc      rmet
 )
 
-;; Home row mods (GACS - Gui, Alt, Ctrl, Shift) with sketchybar notifications
+;; Home row mods with sketchybar notifications
+;; Using on-press tap-vkey to avoid modifier conflicts
 (defalias
-  a (t! charmod-notify a lmet f17 f18)    ;; A = Cmd (⌘)   F17/F18
-  s (t! charmod-notify s lalt f19 f20)    ;; S = Alt (⌥)   F19/F20
-  d (t! charmod-notify d lctl f21 f22)    ;; D = Ctrl (⌃)  F21/F22
-  f (t! charmod-notify f lsft f23 f24)    ;; F = Shift (⇧) F23/F24
-  j (t! charmod-notify j rsft f23 f24)    ;; J = Shift (⇧) F23/F24
-  k (t! charmod-notify k rctl f21 f22)    ;; K = Ctrl (⌃)  F21/F22
-  l (t! charmod-notify l lalt f19 f20)    ;; L = Alt (⌥)   F19/F20
-  ; (t! charmod-notify ; rmet f17 f18)    ;; ; = Cmd (⌘)   F17/F18
+  a (tap-hold-release $tap-timeout $hold-timeout a
+      (multi (on-press tap-vkey mod-cmd-on) lmet (on-release tap-vkey mod-cmd-off)))
+  s (tap-hold-release $tap-timeout $hold-timeout s
+      (multi (on-press tap-vkey mod-alt-on) lalt (on-release tap-vkey mod-alt-off)))
+  d (tap-hold-release $tap-timeout $hold-timeout d
+      (multi (on-press tap-vkey mod-ctrl-on) lctl (on-release tap-vkey mod-ctrl-off)))
+  f (tap-hold-release $tap-timeout $hold-timeout f
+      (multi lsft (on-release tap-vkey mod-sft-off)))
+  j (tap-hold-release $tap-timeout $hold-timeout j
+      (multi rsft (on-release tap-vkey mod-sft-off)))
+  k (tap-hold-release $tap-timeout $hold-timeout k
+      (multi (on-press tap-vkey mod-ctrl-on) rctl (on-release tap-vkey mod-ctrl-off)))
+  l (tap-hold-release $tap-timeout $hold-timeout l
+      (multi (on-press tap-vkey mod-alt-on) ralt (on-release tap-vkey mod-alt-off)))
+  ; (tap-hold-release $tap-timeout $hold-timeout ;
+      (multi (on-press tap-vkey mod-cmd-on) rmet (on-release tap-vkey mod-cmd-off)))
 )
 
-;; Thumb key - Space activates Nav layer on hold (with sketchybar notification)
+;; Thumb key - Space activates Nav layer on hold
 (defalias
-  spc (t! layertap-notify spc nav f14 f13)  ;; F14=nav, F13=base
+  spc (tap-hold-release $tap-timeout $hold-timeout
+        spc
+        (multi
+          (macro S-C-A-M-n)
+          (layer-while-held nav)
+          (on-release tap-vkey layer-base)))
 )
 
 ;; ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -175,10 +185,18 @@
 ;; ║                                                                                       ║
 ;; ╚═══════════════════════════════════════════════════════════════════════════╝
 
+;; Nav layer modifiers with notifications (left hand only)
+(defalias
+  nav-cmd (multi (on-press tap-vkey mod-cmd-on) lmet (on-release tap-vkey mod-cmd-off))
+  nav-alt (multi (on-press tap-vkey mod-alt-on) lalt (on-release tap-vkey mod-alt-off))
+  nav-ctl (multi (on-press tap-vkey mod-ctrl-on) lctl (on-release tap-vkey mod-ctrl-off))
+  nav-sft (multi (on-press tap-vkey mod-sft-on) lsft (on-release tap-vkey mod-sft-off))
+)
+
 (deflayer nav
-  _    _    _    _    _    C-z  home up   end  pgup
-  lmet lalt lctl lsft _    esc  left down rght pgdn
-  _    _    _    _    _    tab  bspc spc  del  ret
+  _    _    _    _    _        C-z  home up   end  pgup
+  @nav-cmd @nav-alt @nav-ctl @nav-sft _    esc  left down right pgdn
+  _    _    _    _    _        tab  bspc spc  del  ret
             _         _         _
 )
 
