@@ -6,10 +6,11 @@
 )
 
 (defsrc
+  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
   q    w    e    r    t    y    u    i    o    p
   a    s    d    f    g    h    j    k    l    ;
   z    x    c    v    b    n    m    ,    .    /
-            lmet      spc       rmet
+  lctl lalt lmet      spc       rmet rctl left down rght
 )
 
 ;; Timing: key-timing threshold 250ms (recommended), tap/hold 200ms
@@ -69,19 +70,33 @@
   nav-alt (multi lalt (on-press tap-virtualkey alt-on) (on-release tap-virtualkey alt-off))
   nav-ctl (multi lctl (on-press tap-virtualkey ctrl-on) (on-release tap-virtualkey ctrl-off))
   nav-sft (multi lsft (on-press tap-virtualkey shift-on) (on-release tap-virtualkey shift-off))
+
+  ;; Function layer toggle (rctl acts as fn key)
+  fn (layer-while-held fn)
 )
 
 (deflayer main
+  brdn brup C-up C-down _ _ prev pp next mute vold volu
   q    w    e    r    t    y    u    i    o    p
   @a   @s   @d   @f   g    h    @j   @k   @l   @;
   z    x    c    v    b    n    m    ,    .    /
-            lmet      @spc      rmet
+  lctl lalt lmet      @spc      rmet @fn  left down rght
 )
 
 ;; Nav layer (hold Space): arrows, home/end, page up/down
 (deflayer nav
+  _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    M-z  home up   end  pgup
   @nav-cmd @nav-alt @nav-ctl @nav-sft _  esc  left down rght pgdn
   _    _    _    _    _    tab  bspc spc  del  ret
-            _         _         _
+  _    _    _         _         _    _    _    _    _
+)
+
+;; Function layer (hold rctl/@fn): F1-F12 become actual F-keys
+(deflayer fn
+  f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
+  _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _
+  _    _    _         _         _    _    _    _    _
 )

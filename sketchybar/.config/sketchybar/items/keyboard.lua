@@ -41,8 +41,10 @@ local active_mods = {
 local current_layer = "main"
 
 -- Single keyboard item: icon = keyboard symbol, label = layer indicator
+-- Fixed width prevents bar from shifting when label changes
 local keyboard = sbar.add("item", "keyboard", {
     position = "left",
+    width = 62,  -- Fixed width to fit "A ⌘⌥⌃⇧"
     icon = {
         string = "􀇳",        -- keyboard SF Symbol
         font = {
@@ -119,3 +121,10 @@ end)
 
 -- Initialize display
 update_display()
+
+-- Spacer to maintain consistent gap to next item (aerospace mode indicator)
+sbar.add("item", "keyboard.spacer", {
+    position = "left",
+    width = 5,
+    background = { drawing = false },
+})
