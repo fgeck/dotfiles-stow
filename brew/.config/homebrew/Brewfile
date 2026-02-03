@@ -64,13 +64,13 @@ brew "krew"                    # kubectl plugin manager
 brew "kubectx"                 # k8s context switcher
 brew "kustomize"
 brew "podman-compose"
-brew "talosctl"
 cask "docker-desktop"
 cask "podman-desktop"
 
 # =============================================================================
 # Cloud & Infrastructure
 # =============================================================================
+brew "talosctl"
 brew "age"                     # encryption
 brew "awscli"
 brew "rclone"                  # cloud storage sync
@@ -114,17 +114,17 @@ brew "nvm"                     # Node version manager
 brew "tailwindcss"
 
 # =============================================================================
-# Dev Tools - General
+# Dev Tools - Other
 # =============================================================================
 brew "luarocks"                # lua package manager (for neovim)
-cask "bruno"                   # API testing
+brew "rust"
 
 # =============================================================================
 # AI & Coding Assistants
 # =============================================================================
 brew "gemini-cli"
+brew "anomalyco/tap/opencode"
 cask "claude-code"
-cask "codex"
 
 # =============================================================================
 # Security & Network
@@ -132,7 +132,6 @@ cask "codex"
 brew "aquasecurity/trivy/trivy"
 brew "arping"
 brew "gobuster"
-brew "katana"
 brew "mtr"
 brew "nmap"
 brew "wireguard-tools"
@@ -166,21 +165,21 @@ cask "vlc"
 # =============================================================================
 # Productivity
 # =============================================================================
-cask "alt-tab"
 cask "drawio"
-cask "itsycal"
 cask "obsidian"
-cask "raycast"
 cask "shottr"                  # screenshots
-brew "kanata"                  # keyboard remapper
-brew "asmvik/formulae/skhd"    # hotkey daemon
+cask "pearcleaner"             # app uninstaller
 
 # =============================================================================
 # macOS Window Management & Status Bar
 # =============================================================================
+cask "raycast"
 brew "felixkratz/formulae/borders"
 brew "felixkratz/formulae/sketchybar"
-cask "pearcleaner"             # app uninstaller
+cask "alt-tab"
+cask "itsycal"
+brew "kanata"                  # keyboard remapper
+brew "asmvik/formulae/skhd"    # hotkey daemon
 cask "stats"                   # system stats
 
 # =============================================================================
