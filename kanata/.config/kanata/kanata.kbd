@@ -8,7 +8,7 @@
 (defsrc
   f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
   q    w    e    r    t    y    u    i    o    p
-  a    s    d    f    g    h    j    k    l    ;
+  caps a    s    d    f    g    h    j    k    l    ;
   z    x    c    v    b    n    m    ,    .    /
   lctl lalt lmet      spc       rmet rctl left down rght
 )
@@ -73,12 +73,15 @@
 
   ;; Function layer toggle (rctl acts as fn key)
   fn (layer-while-held fn)
+
+  ;; Caps Lock: tap = Escape, hold = Hyper (Cmd+Alt+Ctrl+Shift)
+  caps (tap-hold-release $tap-timeout $hold-timeout esc (multi lmet lalt lctl lsft))
 )
 
 (deflayer main
   brdn brup C-up C-down _ _ prev pp next mute vold volu
   q    w    e    r    t    y    u    i    o    p
-  @a   @s   @d   @f   g    h    @j   @k   @l   @;
+  @caps @a   @s   @d   @f   g    h    @j   @k   @l   @;
   z    x    c    v    b    n    m    ,    .    /
   lctl lalt lmet      @spc      rmet @fn  left down rght
 )
@@ -87,7 +90,7 @@
 (deflayer nav
   _    _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    M-z  home up   end  pgup
-  @nav-cmd @nav-alt @nav-ctl @nav-sft _  esc  left down rght pgdn
+  _    @nav-cmd @nav-alt @nav-ctl @nav-sft _  esc  left down rght pgdn
   _    _    _    _    _    tab  bspc spc  del  ret
   _    _    _         _         _    _    _    _    _
 )
@@ -96,7 +99,7 @@
 (deflayer fn
   f1   f2   f3   f4   f5   f6   f7   f8   f9   f10  f11  f12
   _    _    _    _    _    _    _    _    _    _
-  _    _    _    _    _    _    _    _    _    _
+  _    _    _    _    _    _    _    _    _    _    _
   _    _    _    _    _    _    _    _    _    _
   _    _    _         _         _    _    _    _    _
 )
