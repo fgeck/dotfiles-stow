@@ -120,7 +120,6 @@ Displays current date and time.
 # Install dependencies
 brew tap FelixKratz/formulae
 brew install sketchybar
-brew install asmvik/formulae/skhd
 brew install --cask itsycal
 
 # Stow the configuration
