@@ -8,11 +8,6 @@ alias la='ls -lah'
 alias lh=la
 alias cat='bat'
 
-# ---- Docker ----
-alias d='docker'
-alias dsa='docker stop $(docker ps -q -a)'
-alias drma='docker rm -f $(docker ps -q -a)'
-
 # ---- Kubernetes ----
 alias k='kubectl'
 alias kg='kubectl get'
@@ -38,7 +33,7 @@ alias gf='git fetch'
 alias gpl='git pull'
 alias ga='git add'
 alias gaa='git add --all'
-alias gau='git add --updated'
+alias gau='git add -u'
 alias gl="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
 alias glg="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n'' %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all"
 alias lg1="git log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all"
