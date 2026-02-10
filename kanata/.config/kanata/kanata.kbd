@@ -13,18 +13,22 @@
   lctl lalt lmet      spc       rmet rctl left down rght
 )
 
-;; Timing: key-timing threshold 250ms (recommended), tap/hold 200ms
+;; Timeless home row mods (adapted from urob's ZMK timeless approach)
+;; idle-threshold: ~10500/37.5 WPM = 280ms - if key pressed within this, treat as tap
+;; This checks idle time BEFORE keypress rather than streak speed
 (defvar
-  streak-count 3
-  streak-time 250
-  tap-timeout 200
-  hold-timeout 200
+  idle-threshold 250      ;; Key pressed within this = tap (smaller = faster modifier activation)
+  tap-timeout 200         ;; Quick-tap timeout for double letters
+  hold-timeout 200        ;; Hold timeout for modifier activation
 )
 
-;; Smart charmod: skip hold behavior when typing fast
+;; Timeless charmod: check if typing recently occurred (idle-based)
+;; key-timing 2 checks 2nd most recent key - handles two-modifier combos like Cmd+Shift
 (deftemplate charmod (char mod)
   (switch
-    ((key-timing $streak-count less-than $streak-time)) $char break
+    ;; If key pressed within idle-threshold ms → immediate tap
+    ((key-timing 2 less-than $idle-threshold)) $char break
+    ;; Otherwise, use tap-hold with longer timeout
     () (tap-hold-release $tap-timeout $hold-timeout $char $mod) break
   )
 )
@@ -41,10 +45,12 @@
   shift-off (push-msg "mod:shift:off")
 )
 
-;; Charmod with modifier tracking (sends push-msg on press/release)
+;; Timeless charmod with modifier tracking for sketchybar
 (deftemplate charmod-tracked (char mod vk-on vk-off)
   (switch
-    ((key-timing $streak-count less-than $streak-time)) $char break
+    ;; If key pressed within idle-threshold ms → immediate tap
+    ((key-timing 2 less-than $idle-threshold)) $char break
+    ;; Otherwise, use tap-hold with tracking
     () (tap-hold-release $tap-timeout $hold-timeout $char
         (multi $mod
                (on-press tap-virtualkey $vk-on)

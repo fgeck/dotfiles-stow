@@ -23,7 +23,6 @@ brew "bat"                     # better cat
 brew "eza"                     # better ls
 brew "fd"                      # better find
 brew "fzf"                     # fuzzy finder
-brew "fzf-tab"                 # fzf tab completion
 brew "htop"                    # process viewer
 brew "starship"                # prompt
 brew "thefuck"                 # command correction
@@ -218,3 +217,7 @@ cask "font-maple-mono"
 cask "font-meslo-lg-nerd-font"
 cask "font-sketchybar-app-font"
 cask "font-symbols-only-nerd-font"
+cask "autodesk-fusion"
+tap "hAIperspace/hai"
+tap "hAIperspace/hai"
+brew "hai"
