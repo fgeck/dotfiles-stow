@@ -52,6 +52,6 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 # Load remaining modular configs from ~/.config/zsh/
-for config in ~/.config/zsh/{20-plugins,30-aliases}.zsh(N); do
+for config in ~/.config/zsh/{20-plugins,30-aliases,90-work}.zsh(N); do
   source "$config"
 done

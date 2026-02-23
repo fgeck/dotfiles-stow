@@ -15,3 +15,6 @@ export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
 # PATH configuration
 export PATH="/opt/homebrew/opt/curl/bin:/usr/local/kubebuilder/bin:${KREW_ROOT:-$HOME/.krew}/bin:/usr/local/bin/flutter/bin:$GOPATH/bin:/opt/homebrew/bin:/opt/homebrew/opt/libpq/bin:/opt/homebrew/opt/util-linux/bin:/opt/homebrew/opt/util-linux/sbin:$HOME/.local/bin:$HOME/.bin:$PATH"
+
+# Initialize SDKMAN (this sets up Java and other SDKs in PATH)
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
