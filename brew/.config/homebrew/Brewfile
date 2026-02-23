@@ -23,7 +23,7 @@ brew "bat"                     # better cat
 brew "eza"                     # better ls
 brew "fd"                      # better find
 brew "fzf"                     # fuzzy finder
-brew "htop"                    # process viewer
+brew "btop"                    # resource monitor
 brew "starship"                # prompt
 brew "thefuck"                 # command correction
 brew "tldr"                    # simplified man pages
@@ -109,6 +109,7 @@ brew "uv"
 # =============================================================================
 # After brew bundle, run: nvm install --lts
 brew "deno"
+brew "oven-sh/bun/bun"
 brew "nvm"                     # Node version manager
 brew "tailwindcss"
 
@@ -168,6 +169,9 @@ cask "drawio"
 cask "obsidian"
 cask "shottr"                  # screenshots
 cask "pearcleaner"             # app uninstaller
+brew "via"                     # QMK Keyboard Configurator
+cask "homerow"                 # HomeRowMods App
+brew "west"                    # Zephyr RTOS build system
 
 # =============================================================================
 # macOS Window Management & Status Bar
@@ -207,6 +211,7 @@ cask "utm"                     # virtual machines
 # =============================================================================
 cask "kicad"                   # PCB design
 cask "orcaslicer"              # 3D printing
+cask "autodesk-fusion"         # 3D modeling
 
 # =============================================================================
 # Fonts
@@ -217,7 +222,3 @@ cask "font-maple-mono"
 cask "font-meslo-lg-nerd-font"
 cask "font-sketchybar-app-font"
 cask "font-symbols-only-nerd-font"
-cask "autodesk-fusion"
-tap "hAIperspace/hai"
-tap "hAIperspace/hai"
-brew "hai"
