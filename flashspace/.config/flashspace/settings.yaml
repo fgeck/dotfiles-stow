@@ -23,7 +23,7 @@ swipeRight4FingerAction: previousWorkspace
 swipeUp4FingerAction: none
 swipeDown4FingerAction: none
 displayMode: static
-centerCursorOnWorkspaceChange: true
+centerCursorOnWorkspaceChange: false
 changeWorkspaceOnAppAssign: true
 activeWorkspaceOnFocusChange: true
 autoAssignAppsToWorkspaces: false
@@ -51,7 +51,7 @@ spaceControlCurrentDisplayWorkspaces: false
 spaceControlHideEmptyWorkspaces: false
 spaceControlUpdateScreenshotsOnOpen: false
 spaceControlNumberOfColumns: 0
-enableIntegrations: false
+enableIntegrations: true
 runScriptOnLaunch: ''
 runScriptOnWorkspaceChange: sketchybar --trigger flashspace_workspace_change WORKSPACE="$WORKSPACE"
   DISPLAY="$DISPLAY"
