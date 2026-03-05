@@ -171,7 +171,9 @@ cask "shottr"                  # screenshots
 cask "pearcleaner"             # app uninstaller
 brew "via"                     # QMK Keyboard Configurator
 cask "homerow"                 # HomeRowMods App
+cask "mindwtr"                 # GTD App
 brew "west"                    # Zephyr RTOS build system
+brew "hidapi"                  # for custom keyboard firmware development
 
 # =============================================================================
 # macOS Window Management & Status Bar

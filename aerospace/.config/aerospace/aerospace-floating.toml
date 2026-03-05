@@ -1,0 +1,231 @@
+# Aerospace Config - FLOATING ONLY MODE
+# Use with Spencer for layout save/restore and Raycast for quick snapping
+# 
+# To use: symlink or copy to ~/.aerospace.toml
+#   ln -sf ~/.config/aerospace/aerospace-floating.toml ~/.aerospace.toml
+#   aerospace reload-config
+
+config-version = 2
+
+after-startup-command = [
+  'exec-and-forget borders',
+]
+
+# Notify Sketchybar about workspace change
+exec-on-workspace-change = [
+     'sketchybar',
+     '--trigger',
+     'aerospace_workspace_change',
+     'FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE'
+]
+
+start-at-login = true
+
+# Disable tiling normalizations - not needed in floating mode
+enable-normalization-flatten-containers = false
+enable-normalization-opposite-orientation-for-nested-containers = false
+
+# No accordion padding needed in floating mode
+accordion-padding = 0
+
+# Not used in floating mode, but required
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# Mouse follows focus when focused monitor changes
+on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
+
+automatically-unhide-macos-hidden-apps = false
+
+persistent-workspaces = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+on-mode-changed = [
+    'exec-and-forget sketchybar --trigger aerospace_mode_change'
+]
+
+[key-mapping]
+    preset = 'qwerty'
+
+# No gaps needed in floating mode - windows overlap freely
+[gaps]
+    inner.horizontal = 0
+    inner.vertical = 0
+    outer.left = 0
+    outer.bottom = 0
+    outer.top = [
+        { monitor."built-in" = 0 },
+        { monitor."main" = 32 },  # Keep space for sketchybar
+        32
+    ]
+    outer.right = 0
+
+[mode.main.binding]
+    # ============================================
+    # WORKSPACE SWITCHING (the main reason we use Aerospace)
+    # ============================================
+    alt-g = 'workspace 0'
+    alt-q = 'workspace 1'
+    alt-w = 'workspace 2'
+    alt-e = 'workspace 3'
+    alt-r = 'workspace 4'
+    alt-a = 'workspace 5'
+    alt-s = 'workspace 6'
+    alt-d = 'workspace 7'
+    alt-f = 'workspace 8'
+    alt-c = 'workspace 9'
+
+    # Move window to workspace
+    alt-shift-g = 'move-node-to-workspace 0'
+    alt-shift-q = 'move-node-to-workspace 1'
+    alt-shift-w = 'move-node-to-workspace 2'
+    alt-shift-e = 'move-node-to-workspace 3'
+    alt-shift-r = 'move-node-to-workspace 4'
+    alt-shift-a = 'move-node-to-workspace 5'
+    alt-shift-s = 'move-node-to-workspace 6'
+    alt-shift-d = 'move-node-to-workspace 7'
+    alt-shift-f = 'move-node-to-workspace 8'
+    alt-shift-z = 'move-node-to-workspace 9'
+
+    # ============================================
+    # WINDOW FOCUS (cycle through windows on current workspace)
+    # ============================================
+    alt-h = 'focus left'
+    alt-j = 'focus down'
+    alt-k = 'focus up'
+    alt-l = 'focus right'
+
+    # ============================================
+    # MOVE WINDOW (works in floating mode too)
+    # ============================================
+    alt-shift-h = 'move left'
+    alt-shift-j = 'move down'
+    alt-shift-k = 'move up'
+    alt-shift-l = 'move right'
+
+    # ============================================
+    # RESIZE WINDOW
+    # ============================================
+    alt-minus = 'resize smart -50'
+    alt-equal = 'resize smart +50'
+
+    # ============================================
+    # WORKSPACE NAVIGATION
+    # ============================================
+    alt-tab = 'workspace-back-and-forth'
+    alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
+    # ============================================
+    # WINDOW MANAGEMENT (minimal - let Raycast/Spencer handle arrangement)
+    # ============================================
+    alt-m = 'fullscreen'
+    
+    # Screenshot
+    alt-shift-p = 'exec-and-forget screencapture -i -c'
+
+    # Service mode for config reload etc.
+    alt-shift-semicolon = 'mode service'
+
+[mode.service.binding]
+    esc = ['reload-config', 'mode main']
+    r = ['flatten-workspace-tree', 'mode main']
+    backspace = ['close-all-windows-but-current', 'mode main']
+
+# ============================================
+# ALL WINDOWS FLOAT BY DEFAULT
+# ============================================
+[[on-window-detected]]
+run = 'layout floating'
+
+# ============================================
+# OPTIONAL: App-to-workspace assignments (keep your organization)
+# These still work in floating mode - windows just won't tile
+# ============================================
+
+[[on-window-detected]]
+if.app-id = "com.apple.Terminal"
+run = ['move-node-to-workspace 0', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.intellij'
+run = ['move-node-to-workspace 1', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.googlecode.iterm2'
+run = ['move-node-to-workspace 1', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.electron.dockerdesktop'
+run = ['move-node-to-workspace 1', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'net.imput.helium'
+run = ['move-node-to-workspace 2', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.VSCode'
+run = ['move-node-to-workspace 2', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = ['move-node-to-workspace 3', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+if.window-title-regex-substring = 'Reminder'
+run = ['move-node-to-workspace 3', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.Outlook'
+run = ['move-node-to-workspace 4', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.microsoft.teams2'
+run = ['move-node-to-workspace 4', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.apple.mail'
+run = ['move-node-to-workspace 5', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'org.whispersystems.signal-desktop'
+run = ['move-node-to-workspace 5', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'org.mozilla.librewolf'
+run = ['move-node-to-workspace 6', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'dev.zed.Zed'
+run = ['move-node-to-workspace 7', 'layout floating']
+check-further-callbacks = false
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = ['move-node-to-workspace 7', 'layout floating']
+check-further-callbacks = false
+
+# ============================================
+# MONITOR ASSIGNMENT (optional - comment out if not using multi-monitor)
+# ============================================
+# [workspace-to-monitor-force-assignment]
+#     0 = 2
+#     1 = 2
+#     2 = 2
+#     3 = 'Built-in Retina Display'
+#     4 = 3
+#     5 = 2
+#     6 = 2
+#     7 = 2
