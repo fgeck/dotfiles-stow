@@ -1,4 +1,4 @@
-#!/usr/bin/env lua
+#!/opt/homebrew/opt/lua@5.4/bin/lua
 
 -- This is only needed once to install the sketchybar module
 -- (or for an update of the module)
@@ -8,7 +8,7 @@ os.execute("[ ! -d $HOME/.local/share/sketchybar_lua/ ] && (git clone https://gi
 -- installed into the default search path then this would not be needed)
 package.cpath = package.cpath .. ";/Users/" .. os.getenv("USER") .. "/.local/share/sketchybar_lua/?.so"
 
--- Add luarocks paths for AeroSpaceLua dependencies
+-- Add luarocks paths for Lua dependencies (cjson, posix, simdjson)
 local USER = os.getenv("USER")
 package.path = package.path .. ";/Users/" .. USER .. "/.luarocks/share/lua/5.4/?.lua;/Users/" .. USER .. "/.luarocks/share/lua/5.4/?/init.lua"
 package.cpath = package.cpath .. ";/Users/" .. USER .. "/.luarocks/lib/lua/5.4/?.so"
