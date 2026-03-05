@@ -19,10 +19,10 @@ fi
 
 # Create directories that need to hold files from multiple stow packages
 # This allows work dotfiles to add files alongside public dotfiles
-mkdir -p ~/.config/zsh ~/.config/gh ~/.config/tmux
+mkdir -p ~/.config/zsh ~/.config/gh ~/.config/tmux ~/.config/flashspace
 
 # Stow all packages
-packages=(brew zsh git starship bin aerospace borders ghostty tmux nvim sketchybar skhd kanata gh scripts)
+packages=(brew zsh git starship bin aerospace borders ghostty tmux nvim sketchybar skhd kanata gh scripts flashspace)
 
 for pkg in "${packages[@]}"; do
   echo "Stowing $pkg..."
@@ -43,6 +43,13 @@ if [[ ! -L "$HOME/.config/aerospace/aerospace.toml" ]]; then
   echo "  ln -sf aerospace-mba.toml ~/.config/aerospace/aerospace.toml   # MacBook Air"
   echo "  ln -sf aerospace-mbp-1.toml ~/.config/aerospace/aerospace.toml # MBP 1 monitor"
   echo "  ln -sf aerospace-mbp-2.toml ~/.config/aerospace/aerospace.toml # MBP 2 monitors"
+fi
+
+# Symlink flashspace profiles config (choose your setup)
+if [[ ! -L "$HOME/.config/flashspace/profiles.yaml" ]]; then
+  echo ""
+  echo "Flashspace: symlink one of the profiles to profiles.yaml:"
+  echo "  ln -sf flashspace-mkb-2.yaml ~/.config/flashspace/profiles.yaml # MBP work setup"
 fi
 
 echo ""

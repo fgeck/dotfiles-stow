@@ -1,0 +1,96 @@
+profiles:
+- id: 117E1D81-646C-490A-AE37-AB661EC42678
+  name: Default
+  workspaces:
+  - id: D67AE3C8-5564-469A-9FFB-87D729F26528
+    name: Code
+    display: MSI MAG271CQR
+    shortcut: opt+q
+    assignAppShortcut: opt+shift+q
+    apps:
+    - name: iTerm2
+      bundleIdentifier: com.googlecode.iterm2
+      iconPath: /Applications/iTerm.app/Contents/Resources/iTerm2 App Icon for Release.icns
+    - name: IntelliJ IDEA
+      bundleIdentifier: com.jetbrains.intellij
+      iconPath: /Applications/IntelliJ IDEA.app/Contents/Resources/idea.icns
+    symbolIconName: apple.terminal.on.rectangle
+    openAppsOnActivation: false
+  - id: 3E0C1F57-A211-4711-92A4-D3B3C66FE62B
+    name: Web
+    display: MSI MAG271CQR
+    shortcut: opt+w
+    assignAppShortcut: opt+shift+w
+    apps:
+    - name: Helium
+      bundleIdentifier: net.imput.helium
+      iconPath: /Applications/Helium.app/Contents/Resources/app.icns
+    - name: Code
+      bundleIdentifier: com.microsoft.VSCode
+      iconPath: /Applications/Visual Studio Code.app/Contents/Resources/Code.icns
+    symbolIconName: globe
+    openAppsOnActivation: false
+  - id: 7FAB6D25-D7AC-4D15-AD95-0362FDEE3FCB
+    name: Slack
+    display: Built-in Retina Display
+    shortcut: opt+e
+    assignAppShortcut: opt+shift+e
+    apps:
+    - name: Slack
+      bundleIdentifier: com.tinyspeck.slackmacgap
+      iconPath: /Applications/Slack.app/Contents/Resources/electron.icns
+    symbolIconName: bubble.left.and.text.bubble.right.fill
+    openAppsOnActivation: false
+  - id: FD74A879-CB91-4327-9CD1-FFB65E04C622
+    name: Office
+    display: BenQ GL2460
+    shortcut: opt+r
+    assignAppShortcut: opt+shift+r
+    apps:
+    - name: Microsoft Outlook
+      bundleIdentifier: com.microsoft.Outlook
+      iconPath: /Applications/Microsoft Outlook.app/Contents/Resources/Outlook_macOS.icns
+    - name: Microsoft Teams
+      bundleIdentifier: com.microsoft.teams2
+      iconPath: /Applications/Microsoft Teams.app/Contents/Resources/AppIcon.icns
+    symbolIconName: mail.and.text.magnifyingglass
+    openAppsOnActivation: false
+  - id: 26833D6F-21D2-4957-988D-EF325BAEF363
+    name: Chat
+    display: MSI MAG271CQR
+    shortcut: opt+1
+    assignAppShortcut: opt+shift+1
+    apps:
+    - name: Signal
+      bundleIdentifier: org.whispersystems.signal-desktop
+      iconPath: /Applications/Signal.app/Contents/Resources/icon.icns
+    - name: Mail
+      bundleIdentifier: com.apple.mail
+      iconPath: /System/Applications/Mail.app/Contents/Resources/ApplicationIcon.icns
+    symbolIconName: message.fill
+    openAppsOnActivation: false
+  - id: 2C6DC960-DEC7-4983-831C-0936C60249AD
+    name: Browse
+    display: MSI MAG271CQR
+    shortcut: opt+2
+    assignAppShortcut: opt+shift+2
+    apps:
+    - name: LibreWolf
+      bundleIdentifier: org.mozilla.librewolf
+      iconPath: /Applications/LibreWolf.app/Contents/Resources/firefox.icns
+    symbolIconName: globe.americas.fill
+    openAppsOnActivation: false
+  - id: 237F3E20-E344-478F-9121-4009844F80DD
+    name: Dev
+    display: MSI MAG271CQR
+    shortcut: opt+3
+    assignAppShortcut: opt+shift+3
+    apps:
+    - name: Zed
+      bundleIdentifier: dev.zed.Zed
+      iconPath: /Applications/Zed.app/Contents/Resources/Zed.icns
+    - name: Ghostty
+      bundleIdentifier: com.mitchellh.ghostty
+      iconPath: /Applications/Ghostty.app/Contents/Resources/Ghostty.icns
+    symbolIconName: apple.terminal.fill
+    openAppsOnActivation: false
