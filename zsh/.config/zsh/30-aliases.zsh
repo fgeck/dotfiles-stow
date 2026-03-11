@@ -1,5 +1,10 @@
 # Aliases
 
+# Editors & Coding
+alias zz='zed .'
+alias c='code .'
+alias ii='idea .'
+
 # ---- File listing (eza/bat) ----
 alias l='eza --icons --group-directories-first -l'
 alias ll='eza --icons --group-directories-first -lah'
