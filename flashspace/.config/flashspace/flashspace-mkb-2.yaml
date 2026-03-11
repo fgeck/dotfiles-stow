@@ -8,12 +8,12 @@ profiles:
     shortcut: opt+q
     assignAppShortcut: opt+shift+q
     apps:
-    - name: iTerm2
-      bundleIdentifier: com.googlecode.iterm2
-      iconPath: /Applications/iTerm.app/Contents/Resources/iTerm2 App Icon for Release.icns
     - name: IntelliJ IDEA
       bundleIdentifier: com.jetbrains.intellij
       iconPath: /Applications/IntelliJ IDEA.app/Contents/Resources/idea.icns
+    - name: iTerm2
+      bundleIdentifier: com.googlecode.iterm2
+      iconPath: /Applications/iTerm.app/Contents/Resources/iTerm2 App Icon for Release.icns
     symbolIconName: apple.terminal.on.rectangle
     openAppsOnActivation: false
   - id: 3E0C1F57-A211-4711-92A4-D3B3C66FE62B
@@ -22,6 +22,9 @@ profiles:
     shortcut: opt+w
     assignAppShortcut: opt+shift+w
     apps:
+    - name: Excalidraw
+      bundleIdentifier: com.google.Chrome.app.dnfpoenibinnbbckgbhendmlljoobcfg
+      iconPath: /Users/D068994/Applications/Chrome Apps.localized/Excalidraw.app/Contents/Resources/app.icns
     - name: Helium
       bundleIdentifier: net.imput.helium
       iconPath: /Applications/Helium.app/Contents/Resources/app.icns
@@ -89,6 +92,9 @@ profiles:
     - name: Zed
       bundleIdentifier: dev.zed.Zed
       iconPath: /Applications/Zed.app/Contents/Resources/Zed.icns
+    - name: Mindwtr
+      bundleIdentifier: tech.dongdongbh.mindwtr
+      iconPath: /Applications/Mindwtr.app/Contents/Resources/icon.icns
     - name: Ghostty
       bundleIdentifier: com.mitchellh.ghostty
       iconPath: /Applications/Ghostty.app/Contents/Resources/Ghostty.icns
