@@ -34,6 +34,7 @@ brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
 cask "ghostty"
 cask "iterm2"
+cask "itermai"
 
 # =============================================================================
 # Editors & IDEs
@@ -129,7 +130,6 @@ cask "claude-code"
 # =============================================================================
 # Security & Network
 # =============================================================================
-brew "aquasecurity/trivy/trivy"
 brew "arping"
 brew "gobuster"
 brew "mtr"
@@ -174,11 +174,14 @@ cask "homerow"                 # HomeRowMods App
 cask "mindwtr"                 # GTD App
 brew "west"                    # Zephyr RTOS build system
 brew "hidapi"                  # for custom keyboard firmware development
+cask "handy"                   # FOSS speech to text
 
 # =============================================================================
 # macOS Window Management & Status Bar
 # =============================================================================
 cask "raycast"
+cask "nikitabobko/tap/aerospace"
+brew "flashspace"
 brew "felixkratz/formulae/borders"
 brew "felixkratz/formulae/sketchybar"
 cask "alt-tab"
@@ -211,9 +214,9 @@ cask "utm"                     # virtual machines
 # =============================================================================
 # Hardware & Making
 # =============================================================================
-cask "kicad"                   # PCB design
+# cask "kicad"                   # PCB design
 cask "orcaslicer"              # 3D printing
-cask "autodesk-fusion"         # 3D modeling
+# cask "autodesk-fusion"         # 3D modeling
 
 # =============================================================================
 # Fonts
