@@ -20,6 +20,7 @@ fi
 # Create directories that need to hold files from multiple stow packages
 # This allows work dotfiles to add files alongside public dotfiles
 mkdir -p ~/.config/zsh ~/.config/gh ~/.config/tmux ~/.config/flashspace
+mkdir -p ~/Library/LaunchAgents
 
 # Stow all packages
 packages=(brew zsh git starship bin aerospace borders ghostty tmux nvim sketchybar skhd kanata gh scripts flashspace)
