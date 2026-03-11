@@ -81,21 +81,26 @@ alias -g M='| less'
 alias -g L='| wc -l'
 
 # ---- Homebrew ----
-# Wrapper to auto-update Brewfile on install/tap
+# Wrapper to auto-update Brewfile on install/tap (skips duplicates)
 brew() {
   local brewfile="$HOME/.config/homebrew/Brewfile"
   case "$1" in
     install)
       command brew "$@" && {
+        local entry
         if [[ "$2" == "--cask" ]]; then
-          echo "cask \"$3\"" >> "$brewfile"
+          entry="cask \"$3\""
         else
-          echo "brew \"$2\"" >> "$brewfile"
+          entry="brew \"$2\""
         fi
+        grep -qF "$entry" "$brewfile" || echo "$entry" >> "$brewfile"
       }
       ;;
     tap)
-      command brew "$@" && echo "tap \"$2\"" >> "$brewfile"
+      command brew "$@" && {
+        local entry="tap \"$2\""
+        grep -qF "$entry" "$brewfile" || echo "$entry" >> "$brewfile"
+      }
       ;;
     *)
       command brew "$@"
